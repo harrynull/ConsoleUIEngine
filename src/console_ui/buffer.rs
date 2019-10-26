@@ -22,6 +22,24 @@ impl SizedBuffer {
         self.buffer[(y * self.width() + x) as usize]
     }
 
+    pub fn draw_rect(&mut self, val: char, x1: u16, y1: u16, x2:u16, y2: u16) {
+        for y in y1..=y2 {
+            self.draw_hline(val, y, x1, x2);
+        }
+    }
+
+    pub fn draw_vline(&mut self, val: char, x: u16, y1: u16, y2: u16) {
+        for y in y1..=y2 {
+            self.set_pixel(val, x, y);
+        }
+    }
+
+    pub fn draw_hline(&mut self, val: char, y: u16, x1: u16, x2: u16) {
+        for x in x1..=x2 {
+            self.set_pixel(val, x, y);
+        }
+    }
+
     pub fn width(&self) -> u16 { self.size.0 }
 
     pub fn height(&self) -> u16 { self.size.1 }
