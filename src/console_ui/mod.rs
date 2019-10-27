@@ -1,11 +1,13 @@
 use std::thread::sleep;
 use std::time::Duration;
-use crossterm::{Terminal, execute, queue, Color, PrintStyledFont, Colorize, Goto, Clear, ClearType, Result, Output};
+use crossterm::{input, Terminal, queue, Goto, ClearType, Result, Output, RawScreen};
 
 mod buffer;
+mod input_events;
 mod ui_element;
 pub mod ui_components;
 pub use buffer::*;
+pub use input_events::*;
 pub use ui_element::*;
 use std::io::Write;
 
@@ -24,9 +26,9 @@ impl Scene {
 }
 
 impl UiElement for Scene {
-    fn update(&self) {
-        for element in &self.elements{
-            element.update();
+    fn update(&mut self, events: &InputEvents) {
+        for element in &mut self.elements{
+            element.update(events);
         }
     }
 
@@ -71,15 +73,16 @@ impl Console {
             return;
         }
         let old_buffer = self.buffer.clone();
+        self.buffer = SizedBuffer::new(self.buffer.width(), self.buffer.height());
         self.scenes.last().unwrap().render(&mut self.buffer);
         self.update_render_chars(old_buffer);
     }
 
-    fn update(&mut self) {
+    fn update(&mut self, events: &InputEvents) {
         if self.scenes.is_empty() {
             return;
         }
-        self.scenes.last().unwrap().update();
+        self.scenes.last_mut().unwrap().update(events);
     }
 
     pub fn new() -> Console {
@@ -93,10 +96,15 @@ impl Console {
     }
 
     pub fn main_loop(&mut self){
+        let _raw = RawScreen::into_raw_mode();
+        let input = input();
+        let mut reader = input.read_async();
+        self.terminal.clear(ClearType::All).unwrap();
+
         loop{
-            self.update();
+            self.update(&InputEvents::new(&mut reader));
             self.render();
-            sleep(Duration::from_millis(100));
+            sleep(Duration::from_millis(50));
         }
     }
 }
