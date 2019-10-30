@@ -1,10 +1,12 @@
 use super::super::UiElement;
 use super::super::SizedBuffer;
+use std::any::Any;
 
 pub struct Rectangle {
     pub position: (u16, u16),
     pub size: (u16, u16),
     pub fill: bool,
+    pub name: &'static str
 }
 
 static CHARS: [char; 7]  = ['┏','┓','┗','┛','━','┃','█'];
@@ -20,4 +22,10 @@ impl UiElement for Rectangle {
         buffer.draw_vline(CHARS[5], self.position.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
         buffer.draw_vline(CHARS[5], self.position.0+self.size.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
     }
+
+    fn get_name(&self) -> &str {
+        self.name.clone()
+    }
+    fn as_any(&self) -> &dyn Any { self }
+    fn as_any_mut(&mut self) -> &mut dyn Any { self }
 }
