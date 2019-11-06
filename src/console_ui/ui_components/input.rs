@@ -2,8 +2,8 @@ use super::super::UiElement;
 use super::super::SizedBuffer;
 use super::Text;
 use crate::console_ui::InputEvents;
-use crossterm::KeyEvent;
 use std::any::Any;
+use crossterm::input::KeyEvent;
 
 ui_component_struct!(
 pub struct Input {

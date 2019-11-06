@@ -1,6 +1,12 @@
 use std::thread::sleep;
+use std::io::{Write, stdout};
+use std::any::Any;
+use std::rc::Rc;
+use std::cell::{RefCell, Ref, RefMut};
 use std::time::Duration;
-use crossterm::{input, Terminal, queue, Goto, ClearType, Result, Output, RawScreen};
+use crossterm::{queue, Result, Output, style, cursor, input, terminal, ExecutableCommand};
+use crossterm::terminal::{ClearType, size};
+use crossterm::screen::RawScreen;
 
 mod buffer;
 mod input_events;
@@ -10,10 +16,6 @@ pub mod ui_components;
 pub use buffer::*;
 pub use input_events::*;
 pub use ui_element::*;
-use std::io::Write;
-use std::any::Any;
-use std::rc::Rc;
-use std::cell::{RefCell, Ref, RefMut};
 
 
 pub struct Scene {
@@ -39,8 +41,6 @@ impl Scene {
             .map(|e| RefMut::map(e.borrow_mut(),
                     |e| e.as_any_mut().downcast_mut::<T>().unwrap()))
     }
-
-
 }
 
 impl UiElement for Scene {
@@ -63,17 +63,16 @@ impl UiElement for Scene {
 pub struct Console {
     buffer: SizedBuffer,
     scenes: Vec<Scene>,
-    terminal: Terminal,
 }
 
 impl Console {
 
     fn full_render_chars(&self) -> Result<()>{
-        self.terminal.clear(ClearType::All)?;
+        stdout().execute(terminal::Clear(ClearType::All));
 
         for y in 0..self.buffer.height(){
             for x in 0..self.buffer.width(){
-                print!("{0}",self.buffer.get_pixel(x,y));
+                print!("{0}", self.buffer.get_pixel(x,y).content);
             }
             print!("\n");
         }
@@ -83,7 +82,8 @@ impl Console {
     fn update_render_chars(&self, old_buffer: SizedBuffer) -> Result<()> {
         let mut stdout = std::io::stdout();
         for change in self.buffer.compare(&old_buffer) {
-            queue!(stdout, Goto(change.position.0, change.position.1), Output(change.value.to_string()))?;
+            queue!(stdout, cursor::MoveTo(change.position.0, change.position.1),
+                style::PrintStyledContent(change.value.to_styled_content()))?;
         }
         stdout.flush()?;
         Ok(())
@@ -107,9 +107,8 @@ impl Console {
     }
 
     pub fn new() -> Console {
-        let terminal = Terminal::new();
-        let (w, h) = terminal.size().expect("Failed to get terminal size.");
-        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![], terminal }
+        let (w, h) = size().expect("Failed to get terminal size.");
+        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![] }
     }
 
     pub fn add_scene(&mut self, scene: Scene){
@@ -118,9 +117,9 @@ impl Console {
 
     pub fn main_loop(&mut self, update_callback: fn(console: &mut Console)){
         let _raw = RawScreen::into_raw_mode();
-        let input = input();
+        let input = input::input();
         let mut reader = input.read_async();
-        self.terminal.clear(ClearType::All).unwrap();
+        stdout().execute(terminal::Clear(ClearType::All));
 
         loop{
             update_callback(self);
