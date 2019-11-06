@@ -11,35 +11,32 @@ pub use input_events::*;
 pub use ui_element::*;
 use std::io::Write;
 use std::any::Any;
+use std::rc::Rc;
+use std::cell::{RefCell, Ref, RefMut};
 
 
 pub struct Scene {
-    elements: Vec<Box<UiElement>>,
+    elements: Vec<Rc<RefCell<Box<dyn UiElement>>>>,
     name: &'static str
 }
 
 impl Scene {
-    pub fn add_element(&mut self, element: Box<UiElement>){
-        self.elements.push(element);
+    pub fn add_element(&mut self, element: Box<dyn UiElement>){
+        self.elements.push(Rc::new(RefCell::new(element)));
     }
     pub fn new(name: &'static str) -> Scene {
         Scene {elements: vec![], name }
     }
-    pub fn find_child(&self, name: &str) -> Option<&Box<UiElement>> {
-        for element in &self.elements{
-            if element.get_name() == name {
-                return Some(element)
-            }
-        }
-        return None
+
+    pub fn find_child<T>(&self, name: &str) -> Option<Ref<T>> where T: UiElement, T: 'static {
+        self.elements.iter().find(|e|e.borrow().get_name() == name)
+            .map(|e| Ref::map(e.borrow(),
+                         |e| e.as_any().downcast_ref::<T>().unwrap()))
     }
-    pub fn find_child_mut(&mut self, name: &str) -> Option<&mut Box<UiElement>> {
-        for element in &mut self.elements{
-            if element.get_name() == name {
-                return Some(element)
-            }
-        }
-        return None
+    pub fn find_child_mut<T>(&mut self, name: &str) -> Option<RefMut<T>> where T: UiElement, T: 'static {
+        self.elements.iter_mut().find(|e|e.borrow().get_name() == name)
+            .map(|e| RefMut::map(e.borrow_mut(),
+                    |e| e.as_any_mut().downcast_mut::<T>().unwrap()))
     }
 
 
@@ -48,13 +45,13 @@ impl Scene {
 impl UiElement for Scene {
     fn update(&mut self, events: &InputEvents) {
         for element in &mut self.elements{
-            element.update(events);
+            element.borrow_mut().update(events);
         }
     }
 
     fn render(&self, buffer: &mut SizedBuffer) {
         for element in &self.elements{
-            element.render(buffer);
+            element.borrow().render(buffer);
         }
     }
     fn get_name(&self) -> &str{ self.name.clone() }
@@ -98,7 +95,7 @@ impl Console {
         let old_buffer = self.buffer.clone();
         self.buffer = SizedBuffer::new(self.buffer.width(), self.buffer.height());
         self.scenes.last().unwrap().render(&mut self.buffer);
-        self.update_render_chars(old_buffer);
+        self.update_render_chars(old_buffer).unwrap();
     }
 
     fn update(&mut self, events: &InputEvents) {

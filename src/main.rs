@@ -1,5 +1,6 @@
 use crate::console_ui::{Console, Scene};
 use crate::console_ui::ui_components::{Input, Text};
+use std::cell::RefMut;
 
 mod console_ui;
 mod gol;
@@ -7,13 +8,12 @@ mod gol;
 
 fn update_callback(console: &mut Console) {
     let scene = console.get_current_scene_mut().unwrap();
-    let input = scene.find_child("input").unwrap().as_any().downcast_ref::<Input>().unwrap().text.text.clone();
-    let text: &mut Text = scene.find_child_mut("text").unwrap().as_any_mut().downcast_mut::<Text>().unwrap();
-    text.text = input;
+    let input = scene.find_child::<Input>("input").unwrap().text.text.clone();
+    let mut text: RefMut<Text> = scene.find_child_mut::<Text>("text").unwrap();
+    text.text = (input.parse::<i32>().unwrap_or_default() * 2).to_string();
 }
 
 fn main() {
-
     let mut ui = console_ui::Console::new();
     let _board = gol::GameOfLife{};
 
