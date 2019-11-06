@@ -14,10 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/GOL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GOL.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/rectangle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/rectangle.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_element.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,30 +37,11 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>ClearType</find>
-      <find>String</find>
-      <find>get</find>
-      <find>get_any</find>
-      <find>BorrowMut</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>&amp;str</replace>
-      <replace>as_any</replace>
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="eYjCnBPl" />
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1408" />
-    <option name="y" value="-44" />
-    <option name="width" value="1948" />
-    <option name="height" value="2072" />
   </component>
   <component name="ProjectId" id="1TChzKTWsLzXXqDcPd0Kf5Burh6" />
   <component name="PropertiesComponent">
@@ -137,7 +120,7 @@
       <workItem from="1572969925031" duration="68000" />
       <workItem from="1572970255025" duration="602000" />
       <workItem from="1572999393361" duration="247000" />
-      <workItem from="1572999674687" duration="3310000" />
+      <workItem from="1572999674687" duration="5156000" />
     </task>
     <servers />
   </component>

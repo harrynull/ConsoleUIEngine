@@ -4,6 +4,7 @@ use crossterm::{input, Terminal, queue, Goto, ClearType, Result, Output, RawScre
 
 mod buffer;
 mod input_events;
+#[macro_use]
 mod ui_element;
 pub mod ui_components;
 pub use buffer::*;

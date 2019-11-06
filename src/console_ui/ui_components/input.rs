@@ -5,11 +5,11 @@ use crate::console_ui::InputEvents;
 use crossterm::KeyEvent;
 use std::any::Any;
 
+ui_component_struct!(
 pub struct Input {
     pub text: Text,
     pub focus: bool,
-    pub name: &'static str
-}
+});
 
 impl UiElement for Input {
     fn update(&mut self, events: &InputEvents) {
@@ -30,9 +30,6 @@ impl UiElement for Input {
     fn render(&self, buffer: &mut SizedBuffer) {
         self.text.render(buffer);
     }
-    fn get_name(&self) -> &str {
-        self.name.clone()
-    }
-    fn as_any(&self) -> &dyn Any { self }
-    fn as_any_mut(&mut self) -> &mut dyn Any { self }
+    ui_component_impl!();
 }
+

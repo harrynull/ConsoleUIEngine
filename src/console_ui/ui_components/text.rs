@@ -2,11 +2,11 @@ use super::super::UiElement;
 use super::super::SizedBuffer;
 use std::any::Any;
 
+ui_component_struct!(
 pub struct Text {
     pub text: String,
     pub position: (u16, u16),
-    pub name: &'static str
-}
+});
 
 impl UiElement for Text {
     fn render(&self, buffer: &mut SizedBuffer) {
@@ -16,10 +16,5 @@ impl UiElement for Text {
             offset += 1;
         }
     }
-
-    fn get_name(&self) -> &str {
-        self.name.clone()
-    }
-    fn as_any(&self) -> &dyn Any { self }
-    fn as_any_mut(&mut self) -> &mut dyn Any { self }
+    ui_component_impl!();
 }
