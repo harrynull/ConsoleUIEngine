@@ -7,14 +7,25 @@ use crossterm::style;
 
 ui_component_struct!(
 pub struct Text {
-    pub text: String,
+    pub content: String,
     pub position: (u16, u16),
 });
+
+impl Text {
+    pub(crate) fn new(name: &'static str, content: String, position: (u16, u16)) -> Text {
+        Text {
+            name,
+            focused: false,
+            content,
+            position
+        }
+    }
+}
 
 impl UiElement for Text {
     fn render(&self, buffer: &mut SizedBuffer) {
         let mut offset = 0;
-        for c in self.text.chars() {
+        for c in self.content.chars() {
             let mut sc = StyledChar::from_char(c);
             sc.style.foreground_color = Some(style::Color::Green);
             buffer.set_pixel(&sc, self.position.0 + offset, self.position.1);

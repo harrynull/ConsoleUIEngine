@@ -10,6 +10,17 @@ pub struct Rectangle {
     pub fill: bool,
 });
 
+impl Rectangle {
+    pub fn new(name: &'static str, position: (u16, u16), size: (u16, u16)) -> Rectangle {
+        Rectangle {
+            name,
+            focused: false,
+            position,
+            size,
+            fill: false
+        }
+    }
+}
 impl UiElement for Rectangle {
     fn render(&self, buffer: &mut SizedBuffer) {
         let CHARS: [StyledChar; 7]  = [

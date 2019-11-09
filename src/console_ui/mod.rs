@@ -1,7 +1,7 @@
 use std::thread::sleep;
 use std::io::{Write, stdout};
 use std::any::Any;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use std::cell::{RefCell, Ref, RefMut};
 use std::time::Duration;
 use crossterm::{queue, Result, Output, style, cursor, input, terminal, ExecutableCommand};
@@ -16,11 +16,15 @@ pub mod ui_components;
 pub use buffer::*;
 pub use input_events::*;
 pub use ui_element::*;
+use crossterm::input::KeyEvent;
+use std::collections::vec_deque::IterMut;
 
 
 pub struct Scene {
     elements: Vec<Rc<RefCell<Box<dyn UiElement>>>>,
-    name: &'static str
+    current_focused: usize,
+    name: &'static str,
+    focused: bool,
 }
 
 impl Scene {
@@ -28,9 +32,8 @@ impl Scene {
         self.elements.push(Rc::new(RefCell::new(element)));
     }
     pub fn new(name: &'static str) -> Scene {
-        Scene {elements: vec![], name }
+        Scene {elements: vec![], name, focused: false, current_focused: 0 }
     }
-
     pub fn find_child<T>(&self, name: &str) -> Option<Ref<T>> where T: UiElement, T: 'static {
         self.elements.iter().find(|e|e.borrow().get_name() == name)
             .map(|e| Ref::map(e.borrow(),
@@ -41,10 +44,22 @@ impl Scene {
             .map(|e| RefMut::map(e.borrow_mut(),
                     |e| e.as_any_mut().downcast_mut::<T>().unwrap()))
     }
+    fn get_focused_element(&mut self) -> &Rc<RefCell<Box<dyn UiElement>>> {
+        self.elements.iter()
+            .filter(|e| e.borrow().is_focusable()).cycle()
+            .nth(self.current_focused).unwrap()
+    }
 }
 
 impl UiElement for Scene {
     fn update(&mut self, events: &InputEvents) {
+        for event in &events.key_events {
+            if let KeyEvent::Tab = event {
+                self.get_focused_element().borrow_mut().on_focus_removed();
+                self.current_focused+=1;
+                self.get_focused_element().borrow_mut().on_focus();
+            }
+        }
         for element in &mut self.elements{
             element.borrow_mut().update(events);
         }
@@ -55,9 +70,8 @@ impl UiElement for Scene {
             element.borrow().render(buffer);
         }
     }
-    fn get_name(&self) -> &str{ self.name.clone() }
-    fn as_any(&self) -> &dyn Any { self }
-    fn as_any_mut(&mut self) -> &mut dyn Any { self }
+
+    ui_component_impl!();
 }
 
 pub struct Console {
@@ -68,7 +82,7 @@ pub struct Console {
 impl Console {
 
     fn full_render_chars(&self) -> Result<()>{
-        stdout().execute(terminal::Clear(ClearType::All));
+        stdout().execute(terminal::Clear(ClearType::All)).unwrap();
 
         for y in 0..self.buffer.height(){
             for x in 0..self.buffer.width(){
@@ -119,7 +133,7 @@ impl Console {
         let _raw = RawScreen::into_raw_mode();
         let input = input::input();
         let mut reader = input.read_async();
-        stdout().execute(terminal::Clear(ClearType::All));
+        stdout().execute(terminal::Clear(ClearType::All)).unwrap();
 
         loop{
             update_callback(self);

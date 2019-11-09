@@ -8,9 +8,9 @@ mod gol;
 
 fn update_callback(console: &mut Console) {
     let scene = console.get_current_scene_mut().unwrap();
-    let input = scene.find_child::<Input>("input").unwrap().text.text.clone();
+    let input = scene.find_child::<Input>("input").unwrap().text.content.len();
     let mut text: RefMut<Text> = scene.find_child_mut::<Text>("text").unwrap();
-    text.text = (input.parse::<i32>().unwrap_or_default() * 2).to_string();
+    text.content = input.to_string();
 }
 
 fn main() {
@@ -18,26 +18,15 @@ fn main() {
     let _board = gol::GameOfLife{};
 
     let mut scene = console_ui::Scene::new("test scene");
-    scene.add_element(Box::new(console_ui::ui_components::Text{
-        text: "Hello, world!".parse().unwrap(),
-        position: (5, 10),
-        name: "text" })
-    );
-    scene.add_element(Box::new(console_ui::ui_components::Input{
-        text: console_ui::ui_components::Text{
-            text: "Type something...".parse().unwrap(),
-            position: (5, 11),
-            name: ""
-        },
-        focus: true,
-        name: "input"
-    }));
-    scene.add_element(Box::new(console_ui::ui_components::Rectangle {
-        size: (25, 15),
-        position: (1, 2),
-        fill: false,
-        name: "rectangle"
-    }));
+    scene.add_element(Box::new(console_ui::ui_components::Text::new(
+        "text","Hello, world!".to_string(),(5, 10)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Input::new(
+        "input", "Type something...".to_string(), (5, 11)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
+        "rectangle", (1, 2), (25, 15)
+    )));
     ui.add_scene(scene);
     ui.main_loop(update_callback);
 }

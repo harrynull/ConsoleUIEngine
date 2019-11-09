@@ -8,28 +8,45 @@ use crossterm::input::KeyEvent;
 ui_component_struct!(
 pub struct Input {
     pub text: Text,
-    pub focus: bool,
 });
+
+impl Input {
+    pub fn new(name: &'static str, text: String, position: (u16, u16)) -> Input {
+        Input {
+            name,
+            text: Text::new("", text, position),
+            focused: false
+        }
+    }
+}
 
 impl UiElement for Input {
     fn update(&mut self, events: &InputEvents) {
-        for event in &events.key_events {
-            match event {
-                KeyEvent::Backspace => { self.text.text.pop(); },
-                //KeyEvent::Left => {},
-                //KeyEvent::Right => {},
-                //KeyEvent::Delete => {},
-                KeyEvent::Char(c) => { self.text.text.push(*c); },
-                _ => {}
-            }
-        }
-        // TODO: cursor position
-        // TODO: focus
         self.text.update(events);
+        if self.has_focus() {
+            for event in &events.key_events {
+                match event {
+                    KeyEvent::Backspace => { self.text.content.pop(); },
+                    //KeyEvent::Left => {},
+                    //KeyEvent::Right => {},
+                    //KeyEvent::Delete => {},
+                    KeyEvent::Char(c) => { self.text.content.push(*c); },
+                    _ => {}
+                }
+            }
+            // TODO: cursor position
+        }
     }
     fn render(&self, buffer: &mut SizedBuffer) {
         self.text.render(buffer);
     }
     ui_component_impl!();
-}
 
+    fn on_focus(&mut self) {
+        self.focused = true;
+    }
+
+    fn on_focus_removed(&mut self) {
+        self.focused = false;
+    }
+}
