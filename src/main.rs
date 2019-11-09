@@ -18,6 +18,9 @@ fn main() {
     let _board = gol::GameOfLife{};
 
     let mut scene = console_ui::Scene::new("test scene");
+    scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
+        "rectangle", (1, 2), (25, 15)
+    )));
     scene.add_element(Box::new(console_ui::ui_components::Text::new(
         "text","Hello, world!".to_string(),(5, 10)
     )));
@@ -26,9 +29,6 @@ fn main() {
     )));
     scene.add_element(Box::new(console_ui::ui_components::Input::new(
         "input2", "Another Input!".to_string(), (5, 12)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
-        "rectangle", (1, 2), (25, 15)
     )));
     ui.add_scene(scene);
     ui.main_loop(update_callback);

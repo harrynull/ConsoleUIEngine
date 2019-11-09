@@ -23,7 +23,7 @@ impl Rectangle {
 }
 impl UiElement for Rectangle {
     fn render(&self, buffer: &mut SizedBuffer) {
-        let CHARS: [StyledChar; 7]  = [
+        let chars: [StyledChar; 7]  = [
             StyledChar::from_char('┏'),
             StyledChar::from_char('┓'),
             StyledChar::from_char('┗'),
@@ -32,14 +32,14 @@ impl UiElement for Rectangle {
             StyledChar::from_char('┃'),
             StyledChar::from_char('█')];
 
-        buffer.set_pixel(&CHARS[0], self.position.0, self.position.1); // ┏
-        buffer.set_pixel(&CHARS[1], self.position.0+self.size.0, self.position.1); // ┓
-        buffer.set_pixel(&CHARS[2], self.position.0, self.position.1+self.size.1); // ┗
-        buffer.set_pixel(&CHARS[3], self.position.0+self.size.0, self.position.1+self.size.1); // ┛
-        buffer.draw_hline(&CHARS[4], self.position.1, self.position.0+1, self.position.0 + self.size.0 - 1); // ━
-        buffer.draw_hline(&CHARS[4], self.position.1+self.size.1, self.position.0+1, self.position.0 + self.size.0 - 1); // ━
-        buffer.draw_vline(&CHARS[5], self.position.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
-        buffer.draw_vline(&CHARS[5], self.position.0+self.size.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
+        buffer.set_pixel(&chars[0], self.position.0, self.position.1); // ┏
+        buffer.set_pixel(&chars[1], self.position.0+self.size.0, self.position.1); // ┓
+        buffer.set_pixel(&chars[2], self.position.0, self.position.1+self.size.1); // ┗
+        buffer.set_pixel(&chars[3], self.position.0+self.size.0, self.position.1+self.size.1); // ┛
+        buffer.draw_hline(&chars[4], self.position.1, self.position.0+1, self.position.0 + self.size.0 - 1); // ━
+        buffer.draw_hline(&chars[4], self.position.1+self.size.1, self.position.0+1, self.position.0 + self.size.0 - 1); // ━
+        buffer.draw_vline(&chars[5], self.position.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
+        buffer.draw_vline(&chars[5], self.position.0+self.size.0, self.position.1+1, self.position.1 + self.size.1 - 1); // ┃
     }
 
     ui_component_impl!();

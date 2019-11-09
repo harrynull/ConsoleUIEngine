@@ -54,10 +54,16 @@ impl Scene {
 impl UiElement for Scene {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
         for event in &console.get_events().key_events {
-            if let KeyEvent::Tab = event {
+            if let KeyEvent::Tab | KeyEvent::BackTab = event {
                 if let Some(e) = self.get_focused_element() {
                     e.borrow_mut().on_focus_removed();
-                    self.current_focused+=1;
+                    if *event == KeyEvent::Tab {
+                        self.current_focused += 1
+                    }else if self.current_focused > 0 {
+                        self.current_focused -= 1
+                    }else if self.current_focused == 0 {
+                        self.current_focused = self.elements.len() - 1;
+                    }
                     self.get_focused_element().unwrap().borrow_mut().on_focus();
                 }
             }
@@ -128,7 +134,7 @@ impl Console {
         self.buffer = SizedBuffer::new(self.buffer.width(), self.buffer.height());
         self.scenes.last().unwrap().render(&mut self.buffer);
         self.update_render_chars(old_buffer).unwrap();
-        stdout().execute(cursor::MoveTo(self.cursor_pos.0, self.cursor_pos.1));
+        stdout().execute(cursor::MoveTo(self.cursor_pos.0, self.cursor_pos.1)).unwrap();
     }
 
     fn update(&mut self, update_info: &mut ConsoleUpdateInfo) {
@@ -160,7 +166,7 @@ impl Console {
             };
             self.update(&mut update_info);
             self.render();
-            sleep(Duration::from_millis(50));
+            sleep(Duration::from_millis(10));
         }
     }
 
