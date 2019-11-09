@@ -44,10 +44,10 @@ impl Scene {
             .map(|e| RefMut::map(e.borrow_mut(),
                     |e| e.as_any_mut().downcast_mut::<T>().unwrap()))
     }
-    fn get_focused_element(&mut self) -> &Rc<RefCell<Box<dyn UiElement>>> {
+    fn get_focused_element(&mut self) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> {
         self.elements.iter()
             .filter(|e| e.borrow().is_focusable()).cycle()
-            .nth(self.current_focused).unwrap()
+            .nth(self.current_focused)
     }
 }
 
@@ -55,9 +55,11 @@ impl UiElement for Scene {
     fn update(&mut self, events: &InputEvents) {
         for event in &events.key_events {
             if let KeyEvent::Tab = event {
-                self.get_focused_element().borrow_mut().on_focus_removed();
-                self.current_focused+=1;
-                self.get_focused_element().borrow_mut().on_focus();
+                if let Some(e) = self.get_focused_element() {
+                    e.borrow_mut().on_focus_removed();
+                    self.current_focused+=1;
+                    self.get_focused_element().unwrap().borrow_mut().on_focus();
+                }
             }
         }
         for element in &mut self.elements{

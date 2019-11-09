@@ -42,6 +42,8 @@ impl UiElement for Input {
     }
     ui_component_impl!();
 
+    fn is_focusable(&self) -> bool { true }
+
     fn on_focus(&mut self) {
         self.focused = true;
     }

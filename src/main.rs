@@ -24,6 +24,9 @@ fn main() {
     scene.add_element(Box::new(console_ui::ui_components::Input::new(
         "input", "Type something...".to_string(), (5, 11)
     )));
+    scene.add_element(Box::new(console_ui::ui_components::Input::new(
+        "input2", "Another Input!".to_string(), (5, 12)
+    )));
     scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
         "rectangle", (1, 2), (25, 15)
     )));
