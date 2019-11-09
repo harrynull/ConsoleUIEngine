@@ -1,9 +1,10 @@
 use super::SizedBuffer;
 use super::InputEvents;
 use std::any::Any;
+use crate::console_ui::ConsoleUpdateInfo;
 
 pub trait UiElement {
-    fn update(&mut self, _events: &InputEvents) {}
+    fn update(&mut self, _console: &mut ConsoleUpdateInfo) {}
     fn render(&self, _buffer: &mut SizedBuffer) {}
     fn get_name(&self) -> &str;
     fn as_any(&self) -> &dyn Any;

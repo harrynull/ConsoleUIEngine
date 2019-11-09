@@ -1,7 +1,7 @@
 use super::super::UiElement;
 use super::super::SizedBuffer;
 use super::Text;
-use crate::console_ui::InputEvents;
+use crate::console_ui::{InputEvents, ConsoleUpdateInfo};
 use std::any::Any;
 use crossterm::input::KeyEvent;
 
@@ -21,10 +21,10 @@ impl Input {
 }
 
 impl UiElement for Input {
-    fn update(&mut self, events: &InputEvents) {
-        self.text.update(events);
+    fn update(&mut self, console: &mut ConsoleUpdateInfo) {
+        self.text.update(console);
         if self.has_focus() {
-            for event in &events.key_events {
+            for event in &console.get_events().key_events {
                 match event {
                     KeyEvent::Backspace => { self.text.content.pop(); },
                     //KeyEvent::Left => {},
@@ -34,7 +34,8 @@ impl UiElement for Input {
                     _ => {}
                 }
             }
-            // TODO: cursor position
+            let (x,y) = self.text.position;
+            console.set_cursor((x+self.text.content.len() as u16,y));
         }
     }
     fn render(&self, buffer: &mut SizedBuffer) {

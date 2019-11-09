@@ -17,7 +17,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_element.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -121,7 +121,7 @@
       <workItem from="1572999674687" duration="7679000" />
       <workItem from="1573072841483" duration="1697000" />
       <workItem from="1573271058335" duration="3387000" />
-      <workItem from="1573309739742" duration="1936000" />
+      <workItem from="1573309739742" duration="3994000" />
     </task>
     <servers />
   </component>

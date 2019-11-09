@@ -52,8 +52,8 @@ impl Scene {
 }
 
 impl UiElement for Scene {
-    fn update(&mut self, events: &InputEvents) {
-        for event in &events.key_events {
+    fn update(&mut self, console: &mut ConsoleUpdateInfo) {
+        for event in &console.get_events().key_events {
             if let KeyEvent::Tab = event {
                 if let Some(e) = self.get_focused_element() {
                     e.borrow_mut().on_focus_removed();
@@ -63,7 +63,7 @@ impl UiElement for Scene {
             }
         }
         for element in &mut self.elements{
-            element.borrow_mut().update(events);
+            element.borrow_mut().update(console);
         }
     }
 
@@ -76,9 +76,24 @@ impl UiElement for Scene {
     ui_component_impl!();
 }
 
+pub struct ConsoleUpdateInfo {
+    cursor_pos: (u16, u16),
+    input_events: InputEvents,
+}
+
+impl ConsoleUpdateInfo {
+    pub fn get_events(&self) -> &InputEvents {
+        &self.input_events
+    }
+    pub fn set_cursor(&mut self, new_cursor_pos: (u16, u16)) {
+        self.cursor_pos = new_cursor_pos;
+    }
+}
+
 pub struct Console {
     buffer: SizedBuffer,
     scenes: Vec<Scene>,
+    cursor_pos: (u16, u16),
 }
 
 impl Console {
@@ -113,18 +128,20 @@ impl Console {
         self.buffer = SizedBuffer::new(self.buffer.width(), self.buffer.height());
         self.scenes.last().unwrap().render(&mut self.buffer);
         self.update_render_chars(old_buffer).unwrap();
+        stdout().execute(cursor::MoveTo(self.cursor_pos.0, self.cursor_pos.1));
     }
 
-    fn update(&mut self, events: &InputEvents) {
+    fn update(&mut self, update_info: &mut ConsoleUpdateInfo) {
         if self.scenes.is_empty() {
             return;
         }
-        self.scenes.last_mut().unwrap().update(events);
+        self.scenes.last_mut().unwrap().update(update_info);
+        self.cursor_pos = update_info.cursor_pos;
     }
 
     pub fn new() -> Console {
         let (w, h) = size().expect("Failed to get terminal size.");
-        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![] }
+        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![], cursor_pos: (0, 0) }
     }
 
     pub fn add_scene(&mut self, scene: Scene){
@@ -133,13 +150,15 @@ impl Console {
 
     pub fn main_loop(&mut self, update_callback: fn(console: &mut Console)){
         let _raw = RawScreen::into_raw_mode();
+        stdout().execute(terminal::Clear(ClearType::All)).unwrap();
         let input = input::input();
         let mut reader = input.read_async();
-        stdout().execute(terminal::Clear(ClearType::All)).unwrap();
-
         loop{
             update_callback(self);
-            self.update(&InputEvents::new(&mut reader));
+            let mut update_info = ConsoleUpdateInfo {
+                cursor_pos: self.cursor_pos, input_events: InputEvents::new(&mut reader)
+            };
+            self.update(&mut update_info);
             self.render();
             sleep(Duration::from_millis(50));
         }
