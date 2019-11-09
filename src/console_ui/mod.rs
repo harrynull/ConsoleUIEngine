@@ -34,21 +34,30 @@ impl Scene {
     pub fn new(name: &'static str) -> Scene {
         Scene {elements: vec![], name, focused: false, current_focused: 0 }
     }
-    pub fn find_child<T>(&self, name: &str) -> Option<Ref<T>> where T: UiElement, T: 'static {
+    pub fn find_child<T>(&self, name: &str) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> where T: UiElement, T: 'static {
         self.elements.iter().find(|e|e.borrow().get_name() == name)
-            .map(|e| Ref::map(e.borrow(),
-                         |e| e.as_any().downcast_ref::<T>().unwrap()))
-    }
-    pub fn find_child_mut<T>(&mut self, name: &str) -> Option<RefMut<T>> where T: UiElement, T: 'static {
-        self.elements.iter_mut().find(|e|e.borrow().get_name() == name)
-            .map(|e| RefMut::map(e.borrow_mut(),
-                    |e| e.as_any_mut().downcast_mut::<T>().unwrap()))
     }
     fn get_focused_element(&mut self) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> {
         self.elements.iter()
             .filter(|e| e.borrow().is_focusable()).cycle()
             .nth(self.current_focused)
     }
+}
+
+#[macro_export]
+macro_rules! get_child {
+    ($scene:ident, $name:expr, $type:ident, $as:ident, $as_borrow:ident) => {
+    let $as_borrow = $scene.find_child::<$type>($name).unwrap().borrow();
+    let $as = $as_borrow.as_any().downcast_ref::<$type>().unwrap();
+    };
+}
+
+#[macro_export]
+macro_rules! get_child_mut {
+    ($scene:ident, $name:expr, $type:ident, $as:ident, $as_borrow:ident) => {
+    let mut $as_borrow = $scene.find_child::<$type>($name).unwrap().borrow_mut();
+    let mut $as = $as_borrow.as_any_mut().downcast_mut::<$type>().unwrap();
+    };
 }
 
 impl UiElement for Scene {

@@ -1,16 +1,19 @@
 use crate::console_ui::{Console, Scene};
 use crate::console_ui::ui_components::{Input, Text};
 use std::cell::RefMut;
+use std::rc::Rc;
 
 mod console_ui;
 mod gol;
 
-
 fn update_callback(console: &mut Console) {
     let scene = console.get_current_scene_mut().unwrap();
-    let input = scene.find_child::<Input>("input").unwrap().text.content.len();
-    let mut text: RefMut<Text> = scene.find_child_mut::<Text>("text").unwrap();
-    text.content = input.to_string();
+
+    get_child!(scene, "input", Input, input, input_borrow);
+    get_child!(scene, "input2", Input, input2, input2_borrow);
+    get_child_mut!(scene, "text", Text, text, text_borrow);
+
+    text.content = (input.text.content.parse::<i32>().unwrap_or(0) + input2.text.content.parse::<i32>().unwrap_or(0)).to_string();
 }
 
 fn main() {
