@@ -1,5 +1,5 @@
 use crate::console_ui::{Console, Scene, ConsoleUpdateInfo};
-use crate::console_ui::ui_components::{Input, Text, Content, Label};
+use crate::console_ui::ui_components::*;
 use std::cell::RefMut;
 use std::rc::Rc;
 use crossterm::input::KeyEvent;
@@ -10,6 +10,20 @@ mod gol;
 static mut PROGRESS: usize = 0;
 static SPEED: usize = 8;
 static TEXT: &str = "Hello! This is a test message!";
+static LONG_TEXT: &str = "                                            Terms and Conditions\n\
+            \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest! \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            \n\n\\UParagraph 2:\\uU\n\
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere, lacus ac mattis blandit, odio erat mollis turpis, id\
+            convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
+            pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.";
 
 fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
     for event in &update_info.get_events().key_events {
@@ -32,46 +46,14 @@ fn main() {
     let _board = gol::GameOfLife{};
 
     let mut scene = console_ui::Scene::new("test scene");
-    scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
-        "rectangle", (1, 2), (115, 25)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Text::new(
-        "text",Content::from_string_parse_style(
-            "                                            Terms and Conditions\n\
-            \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest! \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            \n\n\\UParagraph 2:\\uU\n\
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere, lacus ac mattis blandit, odio erat mollis turpis, id\
-            convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
-            pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.".to_string()
-        ),
-        (5, 3), (109, 15)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Input::new(
-        "input", "Type your username here".to_string(), (5, 25)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Label::new(
-        "label",Content::from_string("Hello, world!".to_string()),(5, 23)
-    )));
-    //scene.add_element(Box::new(console_ui::ui_components::Input::new(
-    //    "input2", "Another Input!".to_string(), (5, 12)
-    //)));
-    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
-        "checkbox", "I have read and agreed to the above Terms and Conditions".to_string(), (30, 24)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Button::new(
-        "button", "Start".to_string(), (55, 25)
-    )));
-    //scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
-    //    "checkbox2", "select 2".to_string(), (5, 17)
-    //)));
+    add_elements![scene:
+        Rectangle {"rectangle", (1, 2), (115, 25)},
+        Text {"text",Content::from_string_parse_style(LONG_TEXT.to_string()), (5, 3), (109, 15)},
+        Input {"input", "Type your username here".to_string(), (5, 25)},
+        Label {"label",Content::from_string("Hello, world!".to_string()), (5, 23)},
+        Checkbox {"checkbox", "I have read and agreed to the above Terms and Conditions".to_string(), (30, 24)},
+        Button {"button", "Start".to_string(), (55, 25)}
+    ];
     ui.add_scene(scene);
     ui.main_loop(update_callback);
 }

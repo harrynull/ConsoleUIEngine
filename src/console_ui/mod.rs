@@ -45,7 +45,7 @@ impl Scene {
 
 #[macro_export]
 macro_rules! get_child {
-    ($scene:ident, $name:expr, $type:ident, $as:ident, $as_borrow:ident) => {
+    ($scene:ident, $name:expr, $type:ty, $as:ident, $as_borrow:ident) => {
     let $as_borrow = $scene.find_child::<$type>($name).unwrap().borrow();
     let $as = $as_borrow.as_any().downcast_ref::<$type>().unwrap();
     };
@@ -53,12 +53,20 @@ macro_rules! get_child {
 
 #[macro_export]
 macro_rules! get_child_mut {
-    ($scene:ident, $name:expr, $type:ident, $as:ident, $as_borrow:ident) => {
+    ($scene:ident, $name:expr, $type:ty, $as:ident, $as_borrow:ident) => {
     let mut $as_borrow = $scene.find_child::<$type>($name).unwrap().borrow_mut();
     let mut $as = $as_borrow.as_any_mut().downcast_mut::<$type>().unwrap();
     };
 }
 
+#[macro_export]
+macro_rules! add_elements {
+    [$scene:ident: $($type:ty{$($parameter:expr),*}),+] => {
+    $(
+    $scene.add_element(Box::new(<$type>::new($($parameter),*)));
+    )+
+    };
+}
 impl UiElement for Scene {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
         for event in &console.get_events().key_events {
