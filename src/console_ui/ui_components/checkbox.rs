@@ -32,13 +32,11 @@ impl Checkbox {
 
 impl UiElement for Checkbox {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
-        let mut updated = false;
         let mut text_style = None;
         if self.has_focus() {
             for event in &console.get_events().key_events {
                 if let KeyEvent::Enter = event {
                     self.selected = !self.selected;
-                    updated = true;
                 }
             }
             text_style = Some(ContentStyle{

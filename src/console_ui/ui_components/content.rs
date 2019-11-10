@@ -57,14 +57,14 @@ impl Content{
 
     pub fn insert(&mut self, i: usize, ch: char) {
         match self{
-            Content::Plain(c, s) => { c.insert(i, ch); },
+            Content::Plain(c, _s) => { c.insert(i, ch); },
             Content::RichText(c) => { c.insert(i, StyledChar::from_char(ch)) },
         }
     }
 
     pub fn remove(&mut self, i: usize) {
         match self{
-            Content::Plain(c, s) => { c.remove(i); },
+            Content::Plain(c, _s) => { c.remove(i); },
             Content::RichText(c) => { c.remove(i); },
         }
     }

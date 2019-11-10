@@ -40,7 +40,7 @@ impl Label {
 
 pub fn render_line(buffer: &mut SizedBuffer, content: &Content, position: (u16, u16)) {
     let mut x_offset = 0;
-    let iter = match content {
+    match content {
         Content::Plain(content, style) => {
             for c in content.chars() {
                 let mut sc = StyledChar::from_char(c);
@@ -58,7 +58,6 @@ pub fn render_line(buffer: &mut SizedBuffer, content: &Content, position: (u16, 
             }
         },
     };
-
 }
 
 impl UiElement for Label {
