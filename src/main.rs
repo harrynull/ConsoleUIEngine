@@ -16,8 +16,8 @@ fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
         if let KeyEvent::Esc = event { console.exit(); }
     }
     let scene = console.get_current_scene_mut().unwrap();
-    get_child!(scene, "input", Input, input, _input);
-    get_child!(scene, "input2", Input, input2, _input2);
+    //get_child!(scene, "input", Input, input, _input);
+    //get_child!(scene, "input2", Input, input2, _input2);
     get_child_mut!(scene, "label", Label, label, _label);
 
     if unsafe { PROGRESS } < TEXT.len()*SPEED {
@@ -33,32 +33,45 @@ fn main() {
 
     let mut scene = console_ui::Scene::new("test scene");
     scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
-        "rectangle", (1, 2), (110, 25)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Label::new(
-        "label",Content::from_string("Hello, world!".to_string()),(5, 10)
+        "rectangle", (1, 2), (115, 25)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Text::new(
         "text",Content::from_string_parse_style(
-            "The quick brown fox jumps over the lazy dog.\n\n \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest!".to_string()
+            "                                            Terms and Conditions\n\
+            \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest! \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            \n\n\\UParagraph 2:\\uU\n\
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere, lacus ac mattis blandit, odio erat mollis turpis, id\
+            convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
+            pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.".to_string()
         ),
-        (40, 10), (15, 15)
+        (5, 3), (109, 15)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Input::new(
-        "input", "Type something...".to_string(), (5, 11)
+        "input", "Type your username here".to_string(), (5, 25)
     )));
-    scene.add_element(Box::new(console_ui::ui_components::Input::new(
-        "input2", "Another Input!".to_string(), (5, 12)
+    scene.add_element(Box::new(console_ui::ui_components::Label::new(
+        "label",Content::from_string("Hello, world!".to_string()),(5, 23)
+    )));
+    //scene.add_element(Box::new(console_ui::ui_components::Input::new(
+    //    "input2", "Another Input!".to_string(), (5, 12)
+    //)));
+    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
+        "checkbox", "I have read and agreed to the above Terms and Conditions".to_string(), (30, 24)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Button::new(
-        "button", "OK".to_string(), (5, 15)
+        "button", "Start".to_string(), (55, 25)
     )));
-    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
-        "checkbox", "select 1".to_string(), (5, 16)
-    )));
-    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
-        "checkbox2", "select 2".to_string(), (5, 17)
-    )));
+    //scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
+    //    "checkbox2", "select 2".to_string(), (5, 17)
+    //)));
     ui.add_scene(scene);
     ui.main_loop(update_callback);
 }
