@@ -14,10 +14,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/console_ui/ui_components/button.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/console_ui/ui_components/checkbox.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/console_ui/ui_components/content.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/console_ui/ui_components/label.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/button.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/button.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/checkbox.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/checkbox.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
@@ -58,10 +61,10 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Null\CLionProjects\GOL\src\console_ui\ui_components" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Null\CLionProjects\GOL\src\console_ui\ui_components" />
     </key>
   </component>
@@ -129,7 +132,7 @@
       <workItem from="1573072841483" duration="1697000" />
       <workItem from="1573271058335" duration="3387000" />
       <workItem from="1573309739742" duration="11621000" />
-      <workItem from="1573342782503" duration="1979000" />
+      <workItem from="1573342782503" duration="5785000" />
     </task>
     <servers />
   </component>

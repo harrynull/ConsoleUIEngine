@@ -1,4 +1,8 @@
 //use super::ui_elements;
+mod content;
+pub use self::content::*;
+mod label;
+pub use self::label::*;
 mod text;
 pub use self::text::*;
 mod rectangle;

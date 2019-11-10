@@ -17,7 +17,6 @@ pub use buffer::*;
 pub use input_events::*;
 pub use ui_element::*;
 use crossterm::input::KeyEvent;
-use std::collections::vec_deque::IterMut;
 
 
 pub struct Scene {

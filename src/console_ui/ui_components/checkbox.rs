@@ -1,17 +1,17 @@
 use super::super::UiElement;
 use super::super::SizedBuffer;
 use std::any::Any;
-use super::super::StyledChar;
 use crossterm::style;
-use super::Text;
+use super::Label;
 use crossterm::input::KeyEvent;
 use crate::console_ui::ConsoleUpdateInfo;
 use crossterm::style::ContentStyle;
+use crate::console_ui::ui_components::Content;
 
 
 ui_component_struct!(
 pub struct Checkbox {
-    pub text: Text,
+    pub text: Label,
     pub content: String,
     pub selected: bool,
 });
@@ -22,7 +22,7 @@ impl Checkbox {
             name,
             focused: false,
             selected: false,
-            text: Text::new("", "".to_string(), position),
+            text: Label::new("", Content::from_string("".to_string()), position),
             content
         }
     }
@@ -31,6 +31,7 @@ impl Checkbox {
 impl UiElement for Checkbox {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
         let mut updated = false;
+        let mut text_style = None;
         if self.has_focus() {
             for event in &console.get_events().key_events {
                 if let KeyEvent::Enter = event {
@@ -38,15 +39,15 @@ impl UiElement for Checkbox {
                     updated = true;
                 }
             }
-            self.text.text_style = Some(ContentStyle{
+            text_style = Some(ContentStyle{
                 foreground_color: Some(style::Color::Green),
                 background_color: None,
                 attributes: vec![style::Attribute::Underlined]
             });
-        }else{
-            self.text.text_style = None;
         }
-        self.text.content = (if self.selected { "[x] " } else { "[ ] " }).to_string() + &self.content;
+        self.text.replace_content(Content::from_string_styled(
+            (if self.selected { "[x] " } else { "[ ] " }).to_string() + &self.content,
+            text_style));
         self.text.update(console);
     }
     fn render(&self, buffer: &mut SizedBuffer) { self.text.render(buffer); }

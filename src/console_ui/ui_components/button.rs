@@ -1,16 +1,16 @@
 use super::super::UiElement;
 use super::super::SizedBuffer;
-use super::Text;
 use std::any::Any;
-use super::super::StyledChar;
 use crossterm::style;
 use crossterm::style::ContentStyle;
 use crate::console_ui::ConsoleUpdateInfo;
+use crate::console_ui::ui_components::{Label, Content};
+use crate::console_ui::ui_components::Content::Plain;
 
 
 ui_component_struct!(
 pub struct Button {
-    pub text: Text,
+    pub text: Label,
 });
 
 impl Button {
@@ -18,25 +18,29 @@ impl Button {
         Button {
             name,
             focused: false,
-            text: Text::new("", content, position),
+            text: Label::new("", Content::from_string(content), position),
         }
     }
 }
 
 impl UiElement for Button {
-    fn update(&mut self, console: &mut ConsoleUpdateInfo){
-        if self.focused {
-            self.text.text_style = Some(ContentStyle{
+    fn update(&mut self, console: &mut ConsoleUpdateInfo) {
+        let style = if self.focused {
+            Some(ContentStyle {
                 foreground_color: Some(style::Color::Black),
                 background_color: Some(style::Color::White),
                 attributes: vec![]
-            });
-        }else{
-            self.text.text_style = Some(ContentStyle{
+            })
+        } else {
+            Some(ContentStyle {
                 foreground_color: Some(style::Color::Green),
                 background_color: None,
                 attributes: vec![]
-            });
+            })
+        };
+
+        if let Plain(_, ref mut s) = &mut self.text.get_content_mut() {
+            *s = style;
         }
         self.text.update(console);
     }

@@ -1,13 +1,14 @@
 use super::super::UiElement;
 use super::super::SizedBuffer;
-use super::Text;
+use super::Label;
 use crate::console_ui::{InputEvents, ConsoleUpdateInfo};
 use std::any::Any;
 use crossterm::input::KeyEvent;
+use crate::console_ui::ui_components::Content;
 
 ui_component_struct!(
 pub struct Input {
-    pub text: Text,
+    pub text: Label,
     pub cursor_pos: usize,
 });
 
@@ -16,7 +17,7 @@ impl Input {
         let text_len = text.len();
         Input {
             name,
-            text: Text::new("", text, position),
+            text: Label::new("", Content::from_string(text), position),
             focused: false,
             cursor_pos: text_len
         }
@@ -31,13 +32,13 @@ impl UiElement for Input {
                 match event {
                     KeyEvent::Backspace => {
                         if self.cursor_pos > 0 {
-                            self.text.content.remove(self.cursor_pos - 1);
+                            self.text.get_content_mut().remove(self.cursor_pos - 1);
                             self.cursor_pos-=1;
                         }
                     },
                     KeyEvent::Delete => {
-                        if self.cursor_pos < self.text.content.len() {
-                            self.text.content.remove(self.cursor_pos);
+                        if self.cursor_pos < self.text.get_content().len() {
+                            self.text.get_content_mut().remove(self.cursor_pos);
                         }
                     },
                     KeyEvent::Left => {
@@ -46,12 +47,12 @@ impl UiElement for Input {
                         }
                     },
                     KeyEvent::Right => {
-                        if self.cursor_pos < self.text.content.len() {
+                        if self.cursor_pos < self.text.get_content().len() {
                             self.cursor_pos+=1;
                         }
                     },
                     KeyEvent::Char(c) => {
-                        self.text.content.insert(self.cursor_pos, *c);
+                        self.text.get_content_mut().insert(self.cursor_pos, *c);
                         self.cursor_pos+=1;
                     },
                     _ => {}
