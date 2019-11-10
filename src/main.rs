@@ -1,19 +1,30 @@
-use crate::console_ui::{Console, Scene};
+use crate::console_ui::{Console, Scene, ConsoleUpdateInfo};
 use crate::console_ui::ui_components::{Input, Text};
 use std::cell::RefMut;
 use std::rc::Rc;
+use crossterm::input::KeyEvent;
 
 mod console_ui;
 mod gol;
 
-fn update_callback(console: &mut Console) {
+static mut PROGRESS: usize = 0;
+static SPEED: usize = 8;
+static TEXT: &str = "Hello! This is a test message!";
+
+fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
+    for event in &update_info.get_events().key_events {
+        if let KeyEvent::Esc = event { console.exit(); }
+    }
     let scene = console.get_current_scene_mut().unwrap();
+    get_child!(scene, "input", Input, input, _input);
+    get_child!(scene, "input2", Input, input2, _input2);
+    get_child_mut!(scene, "text", Text, text, _text);
 
-    get_child!(scene, "input", Input, input, input_borrow);
-    get_child!(scene, "input2", Input, input2, input2_borrow);
-    get_child_mut!(scene, "text", Text, text, text_borrow);
-
-    text.content = (input.text.content.parse::<i32>().unwrap_or(0) + input2.text.content.parse::<i32>().unwrap_or(0)).to_string();
+    if unsafe { PROGRESS } < TEXT.len()*SPEED {
+        unsafe { PROGRESS +=1; }
+        let current = unsafe { PROGRESS };
+        text.content = TEXT[..current/SPEED].to_string();
+    }
 }
 
 fn main() {
@@ -22,7 +33,7 @@ fn main() {
 
     let mut scene = console_ui::Scene::new("test scene");
     scene.add_element(Box::new(console_ui::ui_components::Rectangle::new(
-        "rectangle", (1, 2), (25, 15)
+        "rectangle", (1, 2), (110, 25)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Text::new(
         "text","Hello, world!".to_string(),(5, 10)
@@ -32,6 +43,15 @@ fn main() {
     )));
     scene.add_element(Box::new(console_ui::ui_components::Input::new(
         "input2", "Another Input!".to_string(), (5, 12)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Button::new(
+        "button", "OK".to_string(), (5, 15)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
+        "checkbox", "select 1".to_string(), (5, 16)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Checkbox::new(
+        "checkbox2", "select 2".to_string(), (5, 17)
     )));
     ui.add_scene(scene);
     ui.main_loop(update_callback);

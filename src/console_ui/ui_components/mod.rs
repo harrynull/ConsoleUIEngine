@@ -5,3 +5,7 @@ mod rectangle;
 pub use self::rectangle::*;
 mod input;
 pub use self::input::*;
+mod button;
+pub use self::button::*;
+mod checkbox;
+pub use self::checkbox::*;

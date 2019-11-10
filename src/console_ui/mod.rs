@@ -109,6 +109,7 @@ pub struct Console {
     buffer: SizedBuffer,
     scenes: Vec<Scene>,
     cursor_pos: (u16, u16),
+    should_stop: bool,
 }
 
 impl Console {
@@ -150,31 +151,32 @@ impl Console {
         if self.scenes.is_empty() {
             return;
         }
-        self.scenes.last_mut().unwrap().update(update_info);
+        self.get_current_scene_mut().unwrap().update(update_info);
         self.cursor_pos = update_info.cursor_pos;
     }
 
     pub fn new() -> Console {
         let (w, h) = size().expect("Failed to get terminal size.");
-        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![], cursor_pos: (0, 0) }
+        Console{ buffer: SizedBuffer::new(w, h), scenes: vec![], cursor_pos: (0, 0), should_stop: false }
     }
 
     pub fn add_scene(&mut self, scene: Scene){
         self.scenes.push(scene);
     }
 
-    pub fn main_loop(&mut self, update_callback: fn(console: &mut Console)){
+    pub fn main_loop(&mut self, update_callback: fn(console: &mut Console, update_info: &mut ConsoleUpdateInfo)){
         let _raw = RawScreen::into_raw_mode();
         stdout().execute(terminal::Clear(ClearType::All)).unwrap();
         let input = input::input();
         let mut reader = input.read_async();
         loop{
-            update_callback(self);
             let mut update_info = ConsoleUpdateInfo {
                 cursor_pos: self.cursor_pos, input_events: InputEvents::new(&mut reader)
             };
+            update_callback(self, &mut update_info);
             self.update(&mut update_info);
             self.render();
+            if self.should_stop { break; }
             sleep(Duration::from_millis(10));
         }
     }
@@ -183,7 +185,11 @@ impl Console {
         self.scenes.last_mut()
     }
 
-    pub fn get_current_scene(&mut self) -> Option<&Scene> {
+    pub fn get_current_scene(&self) -> Option<&Scene> {
         self.scenes.last()
+    }
+
+    pub fn exit(&mut self) {
+        self.should_stop = true;
     }
 }
