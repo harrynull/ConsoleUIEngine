@@ -1,8 +1,10 @@
-use crate::console_ui::{Console, Scene, ConsoleUpdateInfo};
-use crate::console_ui::ui_components::*;
 use std::cell::RefMut;
 use std::rc::Rc;
+
 use crossterm::input::KeyEvent;
+
+use crate::console_ui::{Console, ConsoleUpdateInfo, Scene};
+use crate::console_ui::ui_components::*;
 
 mod console_ui;
 mod gol;

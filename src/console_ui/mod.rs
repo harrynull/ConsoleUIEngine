@@ -1,23 +1,24 @@
-use std::thread::sleep;
-use std::io::{Write, stdout};
 use std::any::Any;
+use std::cell::{Ref, RefCell, RefMut};
+use std::io::{stdout, Write};
 use std::rc::{Rc, Weak};
-use std::cell::{RefCell, Ref, RefMut};
+use std::thread::sleep;
 use std::time::Duration;
-use crossterm::{queue, Result, Output, style, cursor, input, terminal, ExecutableCommand};
-use crossterm::terminal::{ClearType, size};
+
+use crossterm::{cursor, ExecutableCommand, input, Output, queue, Result, style, terminal};
+use crossterm::input::KeyEvent;
 use crossterm::screen::RawScreen;
+use crossterm::terminal::{ClearType, size};
+
+pub use buffer::*;
+pub use input_events::*;
+pub use ui_element::*;
 
 mod buffer;
 mod input_events;
 #[macro_use]
 mod ui_element;
 pub mod ui_components;
-pub use buffer::*;
-pub use input_events::*;
-pub use ui_element::*;
-use crossterm::input::KeyEvent;
-
 
 pub struct Scene {
     elements: Vec<Rc<RefCell<Box<dyn UiElement>>>>,

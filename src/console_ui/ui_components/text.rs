@@ -1,11 +1,14 @@
-use super::super::UiElement;
-use super::super::SizedBuffer;
 use std::any::Any;
-use super::super::StyledChar;
+
 use crossterm::style;
-use crossterm::style::{StyledContent, ContentStyle};
+use crossterm::style::{ContentStyle, StyledContent};
+
 use crate::console_ui::ui_components::{Content, render_line};
 use crate::console_ui::ui_components::Content::{Plain, RichText};
+
+use super::super::SizedBuffer;
+use super::super::StyledChar;
+use super::super::UiElement;
 
 pub enum WordWrap {
     Normal, BreakWord

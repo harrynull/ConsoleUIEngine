@@ -1,7 +1,8 @@
-use super::super::UiElement;
-use super::super::SizedBuffer;
 use std::any::Any;
+
+use super::super::SizedBuffer;
 use super::super::StyledChar;
+use super::super::UiElement;
 
 ui_component_struct!(
 pub struct Rectangle {

@@ -1,15 +1,16 @@
+pub use self::button::*;
+pub use self::checkbox::*;
+pub use self::content::*;
+pub use self::input::*;
+pub use self::label::*;
+pub use self::rectangle::*;
+pub use self::text::*;
+
 //use super::ui_elements;
 mod content;
-pub use self::content::*;
 mod label;
-pub use self::label::*;
 mod text;
-pub use self::text::*;
 mod rectangle;
-pub use self::rectangle::*;
 mod input;
-pub use self::input::*;
 mod button;
-pub use self::button::*;
 mod checkbox;
-pub use self::checkbox::*;

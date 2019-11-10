@@ -1,10 +1,13 @@
-use super::super::UiElement;
-use super::super::SizedBuffer;
 use std::any::Any;
-use super::super::StyledChar;
+
 use crossterm::style;
-use crossterm::style::{StyledContent, ContentStyle};
+use crossterm::style::{ContentStyle, StyledContent};
+
 use crate::console_ui::ui_components::Content;
+
+use super::super::SizedBuffer;
+use super::super::StyledChar;
+use super::super::UiElement;
 
 ui_component_struct!(
 pub struct Label {

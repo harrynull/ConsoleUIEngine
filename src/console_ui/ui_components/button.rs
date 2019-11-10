@@ -1,12 +1,14 @@
-use super::super::UiElement;
-use super::super::SizedBuffer;
 use std::any::Any;
+
 use crossterm::style;
 use crossterm::style::ContentStyle;
+
 use crate::console_ui::ConsoleUpdateInfo;
-use crate::console_ui::ui_components::{Label, Content};
+use crate::console_ui::ui_components::{Content, Label};
 use crate::console_ui::ui_components::Content::Plain;
 
+use super::super::SizedBuffer;
+use super::super::UiElement;
 
 ui_component_struct!(
 pub struct Button {

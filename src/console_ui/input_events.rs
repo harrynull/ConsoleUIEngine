@@ -1,4 +1,4 @@
-use crossterm::input::{KeyEvent, MouseEvent, AsyncReader, InputEvent};
+use crossterm::input::{AsyncReader, InputEvent, KeyEvent, MouseEvent};
 
 pub struct InputEvents{
     pub key_events: Vec<KeyEvent>,

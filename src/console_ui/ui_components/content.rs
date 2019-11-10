@@ -1,6 +1,8 @@
-use crossterm::style::{ContentStyle, Attribute, Color};
-use crate::console_ui::StyledChar;
 use std::thread::current;
+
+use crossterm::style::{Attribute, Color, ContentStyle};
+
+use crate::console_ui::StyledChar;
 
 #[derive(Clone)]
 pub enum Content {

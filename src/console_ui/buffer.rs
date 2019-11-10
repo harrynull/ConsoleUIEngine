@@ -1,4 +1,4 @@
-use crossterm::style::{StyledContent, ContentStyle};
+use crossterm::style::{ContentStyle, StyledContent};
 
 #[derive(Debug, Clone, Default)]
 pub struct StyledChar {

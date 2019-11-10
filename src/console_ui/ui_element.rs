@@ -1,7 +1,9 @@
-use super::SizedBuffer;
-use super::InputEvents;
 use std::any::Any;
+
 use crate::console_ui::ConsoleUpdateInfo;
+
+use super::InputEvents;
+use super::SizedBuffer;
 
 pub trait UiElement {
     fn update(&mut self, _console: &mut ConsoleUpdateInfo) {}
