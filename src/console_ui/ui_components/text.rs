@@ -4,15 +4,11 @@ use std::any::Any;
 use super::super::StyledChar;
 use crossterm::style;
 use crossterm::style::{StyledContent, ContentStyle};
-use crate::console_ui::ui_components::Content;
+use crate::console_ui::ui_components::{Content, render_line};
+use crate::console_ui::ui_components::Content::{Plain, RichText};
 
 pub enum WordWrap {
     Normal, BreakWord
-}
-
-enum WrappedContent {
-    Plain(Vec<String>, Option<ContentStyle>),
-    RichText(Vec<Vec<StyledChar>>)
 }
 
 pub struct Text {
@@ -21,48 +17,55 @@ pub struct Text {
     pub size: (u16, u16),
     pub word_wrap: WordWrap,
     focused: bool,
-    content: WrappedContent,
+    content: Vec<Content>,
     raw_content: Content,
 }
 
-fn break_line_str(content: String, wrap_type: WordWrap, size: (u16, u16)) -> Vec<String> {
+fn break_line_str(content: String, wrap_type: WordWrap, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
     let (w,h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
     let mut current_line = String::new();
     for c in content.chars() {
         cnt+=1;
-        current_line.push(c);
-        if cnt == w {
+        if c != '\n' { current_line.push(c); }
+        if cnt == w || c=='\n' {
             cnt = 0;
+            ret.push(Plain(current_line.clone(), style.clone()));
+            current_line.clear();
         }
+    }
+    if !current_line.is_empty() {
+        ret.push(Plain(current_line.clone(), style.clone()));
     }
     ret
 }
 
-fn break_line_rich_text(content: Vec<StyledChar>, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Vec<StyledChar>> {
+fn break_line_rich_text(content: Vec<StyledChar>, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
     let (w,h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
     let mut current_line = Vec::new();
     for c in content {
+        let char_val = c.content.clone();
         cnt+=1;
-        current_line.push( c);
-        if cnt == w {
+        if char_val != '\n' { current_line.push( c); }
+        if cnt == w || char_val =='\n'{
             cnt = 0;
+            ret.push(RichText(current_line.clone()));
+            current_line.clear();
         }
+    }
+    if !current_line.is_empty() {
+        ret.push(RichText(current_line.clone()));
     }
     ret
 }
 
-fn wrap_content(content: Content, wrap_type: WordWrap, size: (u16, u16)) -> WrappedContent {
+fn wrap_content(content: Content, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
     match content {
-        Content::Plain(c, style) => {
-            WrappedContent::Plain(break_line_str(c, wrap_type, size), style)
-        },
-        Content::RichText(c) => {
-            WrappedContent::RichText(break_line_rich_text(c, wrap_type, size))
-        },
+        Content::Plain(c, style) => { break_line_str(c, wrap_type, size, style) },
+        Content::RichText(c) => { break_line_rich_text(c, wrap_type, size) },
     }
 }
 
@@ -91,26 +94,13 @@ impl Text {
 
 impl UiElement for Text {
     fn render(&self, buffer: &mut SizedBuffer) {
-
-        let iter = match &self.content {
-            WrappedContent::Plain(c, style) => {
-                let mut yoffset = 0;
-                for line in c {
-                    let mut xoffset = 0;
-                    for c in line.chars() {
-                        let mut sc = StyledChar::from_char(c);
-                        if let Some(style) = style {
-                            sc.style = style.clone();
-                        }
-                        buffer.set_pixel(&sc, self.position.0 + xoffset, self.position.1 + yoffset);
-                        xoffset += 1;
-                    }
-                    yoffset += 1;
-                }
-            },
-            WrappedContent::RichText(c) => {
-            },
-        };
+        let mut y_offset = 0;
+        for line in &self.content {
+            let mut pos = self.position;
+            pos.1 += y_offset;
+            render_line(buffer, &line, pos);
+            y_offset += 1;
+        }
     }
     ui_component_impl!();
 }

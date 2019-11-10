@@ -36,23 +36,32 @@ impl Label {
     }
 }
 
+pub fn render_line(buffer: &mut SizedBuffer, content: &Content, position: (u16, u16)) {
+    let mut x_offset = 0;
+    let iter = match content {
+        Content::Plain(content, style) => {
+            for c in content.chars() {
+                let mut sc = StyledChar::from_char(c);
+                if let Some(style) = style {
+                    sc.style = style.clone();
+                }
+                buffer.set_pixel(&sc, position.0 + x_offset, position.1);
+                x_offset += 1;
+            }
+        },
+        Content::RichText(content) => {
+            for c in content {
+                buffer.set_pixel(&c, position.0 + x_offset, position.1);
+                x_offset += 1;
+            }
+        },
+    };
+
+}
+
 impl UiElement for Label {
     fn render(&self, buffer: &mut SizedBuffer) {
-        let iter = match &self.content {
-            Content::Plain(content, style) => {
-                let mut xoffset = 0;
-                for c in content.chars() {
-                    let mut sc = StyledChar::from_char(c);
-                    if let Some(style) = style {
-                        sc.style = style.clone();
-                    }
-                    buffer.set_pixel(&sc, self.position.0 + xoffset, self.position.1);
-                    xoffset += 1;
-                }
-            },
-            Content::RichText(c) => {
-            },
-        };
+        render_line(buffer, &self.content, self.position);
     }
     ui_component_impl!();
 }

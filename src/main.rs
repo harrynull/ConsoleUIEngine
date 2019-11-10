@@ -18,12 +18,12 @@ fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
     let scene = console.get_current_scene_mut().unwrap();
     get_child!(scene, "input", Input, input, _input);
     get_child!(scene, "input2", Input, input2, _input2);
-    get_child_mut!(scene, "text", Label, text, _text);
+    get_child_mut!(scene, "label", Label, label, _label);
 
     if unsafe { PROGRESS } < TEXT.len()*SPEED {
         unsafe { PROGRESS +=1; }
         let current = unsafe { PROGRESS };
-        text.replace_content(Content::from_string(TEXT[..current/SPEED].to_string()));
+        label.replace_content(Content::from_string(TEXT[..current/SPEED].to_string()));
     }
 }
 
@@ -36,7 +36,13 @@ fn main() {
         "rectangle", (1, 2), (110, 25)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Label::new(
-        "text",Content::from_string("Hello, world!".to_string()),(5, 10)
+        "label",Content::from_string("Hello, world!".to_string()),(5, 10)
+    )));
+    scene.add_element(Box::new(console_ui::ui_components::Text::new(
+        "text",Content::from_string_parse_style(
+            "The quick brown fox jumps over the lazy dog.\n\n \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest!".to_string()
+        ),
+        (40, 10), (15, 15)
     )));
     scene.add_element(Box::new(console_ui::ui_components::Input::new(
         "input", "Type something...".to_string(), (5, 11)
