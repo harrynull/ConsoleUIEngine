@@ -16,7 +16,10 @@
     <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/label.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/label.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_element.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +76,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo Command.Run">
+    <configuration name="Expand game_of_life::console_ui::ui_components::rectangle [GOL]" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="expand --bin game_of_life --color=always --theme=GitHub --tests console_ui::ui_components::rectangle" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run" />
@@ -96,6 +112,11 @@
       <envs />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo Command.Expand game_of_life::console_ui::ui_components::rectangle [GOL]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -126,7 +147,7 @@
       <workItem from="1573271058335" duration="3387000" />
       <workItem from="1573309739742" duration="11621000" />
       <workItem from="1573342782503" duration="8030000" />
-      <workItem from="1573351660693" duration="2920000" />
+      <workItem from="1573351660693" duration="4270000" />
     </task>
     <servers />
   </component>

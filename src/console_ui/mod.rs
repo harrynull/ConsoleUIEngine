@@ -67,6 +67,7 @@ macro_rules! add_elements {
     )+
     };
 }
+
 impl UiElement for Scene {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
         for event in &console.get_events().key_events {

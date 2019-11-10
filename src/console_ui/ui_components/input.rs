@@ -9,7 +9,7 @@ use crate::console_ui::ui_components::Content;
 ui_component_struct!(
 pub struct Input {
     pub text: Label,
-    pub cursor_pos: usize,
+    cursor_pos: usize,
 });
 
 impl Input {

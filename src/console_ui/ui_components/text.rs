@@ -11,15 +11,14 @@ pub enum WordWrap {
     Normal, BreakWord
 }
 
+ui_component_struct!(
 pub struct Text {
-    pub name: &'static str,
     pub position: (u16, u16),
     pub size: (u16, u16),
     pub word_wrap: WordWrap,
-    focused: bool,
     content: Vec<Content>,
     raw_content: Content,
-}
+});
 
 fn break_line_str(content: String, wrap_type: WordWrap, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
     let (w,h) = size;

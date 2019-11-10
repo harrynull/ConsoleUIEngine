@@ -6,12 +6,11 @@ use crossterm::style;
 use crossterm::style::{StyledContent, ContentStyle};
 use crate::console_ui::ui_components::Content;
 
+ui_component_struct!(
 pub struct Label {
-    pub name: &'static str,
     pub position: (u16, u16),
-    focused: bool,
     content: Content,
-}
+});
 
 impl Label {
     pub fn new(name: &'static str, content: Content, position: (u16, u16)) -> Label {

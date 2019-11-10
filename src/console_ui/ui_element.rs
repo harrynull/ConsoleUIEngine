@@ -18,11 +18,11 @@ pub trait UiElement {
 
 #[macro_export]
 macro_rules! ui_component_struct {
-    (pub struct $name:ident { $( pub $field:ident: $ty:ty ),* $(,)* }) => {
+    (pub struct $name:ident { $( $vis:vis $field:ident: $ty:ty ),* $(,)* }) => {
         pub struct $name {
             pub name: &'static str,
             focused: bool,
-            $( pub $field: $ty ),*
+            $( $vis $field: $ty ),*
         }
     };
 }
