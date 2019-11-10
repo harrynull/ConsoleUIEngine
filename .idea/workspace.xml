@@ -13,22 +13,7 @@
     <cargoProject FILE="$PROJECT_DIR$/src/Console/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/buffer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/buffer.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/input_events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/input_events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/button.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/button.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/checkbox.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/checkbox.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/content.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/content.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/input.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/label.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/label.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/rectangle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/rectangle.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_element.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-    </list>
+    <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +140,7 @@
       <workItem from="1573271058335" duration="3387000" />
       <workItem from="1573309739742" duration="11621000" />
       <workItem from="1573342782503" duration="8030000" />
-      <workItem from="1573351660693" duration="4401000" />
+      <workItem from="1573351660693" duration="4436000" />
     </task>
     <servers />
   </component>
