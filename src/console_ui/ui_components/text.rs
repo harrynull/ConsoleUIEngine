@@ -9,6 +9,7 @@ use crate::console_ui::ui_components::Content::{Plain, RichText};
 use super::super::SizedBuffer;
 use super::super::StyledChar;
 use super::super::UiElement;
+use std::thread::current;
 
 pub enum WordWrap {
     Normal, BreakWord
@@ -43,7 +44,7 @@ fn break_line_str(content: String, wrap_type: WordWrap, size: (u16, u16), style:
     ret
 }
 
-fn break_line_rich_text(content: Vec<StyledChar>, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
+fn break_line_rich_text_break(content: Vec<StyledChar>, size: (u16, u16)) -> Vec<Content> {
     let (w,h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
@@ -64,10 +65,47 @@ fn break_line_rich_text(content: Vec<StyledChar>, wrap_type: WordWrap, size: (u1
     ret
 }
 
+fn break_line_rich_text_normal(content: Vec<StyledChar>, size: (u16, u16)) -> Vec<Content> {
+    let w = size.0 as usize;
+    let mut ret = Vec::new();
+    let mut current_line = Vec::new();
+    let mut current_word = Vec::new();
+    for c in content {
+        let char_val = c.content.clone();
+        if char_val != '\n' { current_word.push( c); }
+        if char_val == ' ' || char_val == '\n' { // a new word
+            while current_line.len() + current_word.len() > w { // if the current line cannot contain this word
+                if current_word.len() > w { // break the word if the word is too long to be contained in one line
+                    let (cur, nxt) = current_word.split_at_mut(w-current_line.len());
+                    current_line.append(&mut cur.to_vec());
+                    current_word = nxt.to_vec();
+                }
+                ret.push(RichText(current_line.clone())); // a new line required
+                current_line.clear();
+            }
+            current_line.append(&mut current_word);
+        }
+        if char_val =='\n' { // new line required
+            current_line.append(&mut current_word);
+            ret.push(RichText(current_line.clone()));
+            current_line.clear();
+        }
+    }
+    if !current_word.is_empty() {
+        current_line.append(&mut current_word);
+    }
+    if !current_line.is_empty() {
+        ret.push(RichText(current_line.clone()));
+    }
+    ret
+}
 fn wrap_content(content: Content, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
     match content {
         Content::Plain(c, style) => { break_line_str(c, wrap_type, size, style) },
-        Content::RichText(c) => { break_line_rich_text(c, wrap_type, size) },
+        Content::RichText(c) => { match wrap_type {
+            WordWrap::Normal => break_line_rich_text_normal(c, size),
+            WordWrap::BreakWord => break_line_rich_text_break(c, size),
+        }},
     }
 }
 

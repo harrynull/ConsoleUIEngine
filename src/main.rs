@@ -14,14 +14,15 @@ static SPEED: usize = 8;
 static TEXT: &str = "Hello! This is a test message!";
 static LONG_TEXT: &str = "                                            Terms and Conditions\n\
             \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest! \
+            The quick brown fox jumps over the lazy dog. <force\nnewline> The quick brown FOX jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+            The quick brown fox jumps over the lazy dog. longwordendwithanewlinesymbollongwordendwithanewlinesymbol\n\
+Try to use up rest of the line: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
             \n\n\\UParagraph 2:\\uU\n\
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere, lacus ac mattis blandit, odio erat mollis turpis, id\
             convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
