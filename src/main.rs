@@ -7,7 +7,6 @@ use crate::console_ui::{Console, ConsoleUpdateInfo, Scene};
 use crate::console_ui::ui_components::*;
 
 mod console_ui;
-mod gol;
 
 static mut PROGRESS: usize = 0;
 static SPEED: usize = 8;
@@ -47,8 +46,6 @@ fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
 
 fn main() {
     let mut ui = console_ui::Console::new();
-    let _board = gol::GameOfLife{};
-
     let mut scene = console_ui::Scene::new("test scene");
     add_elements![scene:
         Rectangle {"rectangle", (1, 2), (115, 25)},

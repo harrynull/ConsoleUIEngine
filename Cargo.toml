@@ -1,5 +1,5 @@
 [package]
-name = "game_of_life"
+name = "console_ui_engine"
 version = "0.1.0"
 authors = ["Harry Null <harryyunull@gmail.com>"]
 edition = "2018"
