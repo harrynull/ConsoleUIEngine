@@ -3,6 +3,51 @@ use std::thread::current;
 use crossterm::style::{Attribute, Color, ContentStyle};
 
 use crate::console_ui::StyledChar;
+use std::str::FromStr;
+
+enum StyleType {
+    ForegroundColor(Color),
+    BackgroundColor(Color),
+    Attribute(Attribute)
+}
+
+impl StyleType {
+    fn from_str(name: &str) -> StyleType {
+        match name.to_lowercase().as_str() {
+            "bold" => { StyleType::Attribute(Attribute::Bold) }
+            "dim" => { StyleType::Attribute(Attribute::Dim) }
+            "italic" => { StyleType::Attribute(Attribute::Italic) }
+            "underline" => { StyleType::Attribute(Attribute::Underlined) }
+            "slow_blink" => { StyleType::Attribute(Attribute::SlowBlink) }
+            "rapid_blink" => { StyleType::Attribute(Attribute::RapidBlink) }
+            "reverse" => { StyleType::Attribute(Attribute::Reverse) }
+            "hidden" => { StyleType::Attribute(Attribute::Hidden) }
+            "crossed_out" => { StyleType::Attribute(Attribute::CrossedOut) }
+            "fraktur" => { StyleType::Attribute(Attribute::Fraktur) }
+            "framed" => { StyleType::Attribute(Attribute::Framed) }
+            "encircled" => { StyleType::Attribute(Attribute::Encircled) }
+            "overline" => { StyleType::Attribute(Attribute::OverLined) }
+            _ => {
+                if name.starts_with("fore:") {
+                    if name.starts_with("fore:rgb"){
+                        let rgb = &name[9..name.len()-1];
+                        let mut res=rgb.split(',').map(|e|e.parse::<u8>()
+                            .expect(format!("Failed to parse rich text style: RGB not valid.{}",rgb.to_string()).as_str()));
+                        let r=res.nth(0).unwrap();
+                        let g=res.nth(0).unwrap();
+                        let b=res.nth(0).unwrap();
+                        StyleType::ForegroundColor(Color::Rgb { r, g, b })
+                    }
+                    else {
+                        StyleType::ForegroundColor(Color::from_str(&name[5..]).unwrap())
+                    }
+                } else {
+                    StyleType::BackgroundColor(Color::from_str(&name[5..]).unwrap())
+                }
+            }
+        }
+    }
+}
 
 #[derive(Clone)]
 pub enum Content {
@@ -21,36 +66,62 @@ impl Content{
     pub fn from_string_parse_style(str: String) -> Content {
         let mut ret = Vec::new();
         let mut current_style = ContentStyle::new();
+        let mut style_stack = Vec::new();
         let mut escape = false;
-        let mut undo = false;
+        let mut tag = false;
+        let mut current_tag_content = String::new();
         for c in str.chars() {
-            if escape {
-                match c {
-                    'U' => {
-                        if !undo { current_style.attributes.push(Attribute::Underlined) }
-                        else { current_style.attributes.retain(|&e| e!=Attribute::Underlined) }
+            if c=='<' {
+                if escape { escape = false; }
+                else { tag = true; continue; }
+            }
+
+            if tag {
+                if c=='>' {
+                    tag = false;
+                    if current_tag_content.starts_with('/'){
+                        let style = style_stack.pop().expect("Failed to parse rich text style.");
+
+                        match style {
+                            StyleType::ForegroundColor(_) => {
+                                current_style.foreground_color = None;
+                            },
+                            StyleType::BackgroundColor(_) => {
+                                current_style.background_color = None;
+                            },
+                            StyleType::Attribute(attr) => {
+                                current_style.attributes.retain(|&e| e!=attr);
+                            },
+                        }
                     }
-                    'r' => current_style.foreground_color = Some(Color::Red),
-                    'R' => current_style.background_color = Some(Color::Red),
-                    'g' => current_style.foreground_color = Some(Color::Green),
-                    'G' => current_style.background_color = Some(Color::Green),
-                    'b' => current_style.foreground_color = Some(Color::Blue),
-                    'B' => current_style.background_color = Some(Color::Blue),
-                    'd' => current_style.foreground_color = Some(Color::Black),
-                    'D' => current_style.background_color = Some(Color::Black),
-                    'c' => current_style.foreground_color = None,
-                    'C' => current_style.background_color = None,
-                    _ => {}
+                    else {
+                        let style = StyleType::from_str(current_tag_content.as_str());
+                        match style {
+                            StyleType::ForegroundColor(color) => {
+                                current_style.foreground_color = Some(color);
+                            },
+                            StyleType::BackgroundColor(color) => {
+                                current_style.background_color = Some(color);
+                            },
+                            StyleType::Attribute(attr) => {
+                                current_style.attributes.push(attr);
+                            },
+                        }
+                        style_stack.push(style);
+                    }
+                    current_tag_content.clear();
+                } else {
+                    current_tag_content.push(c);
                 }
-                if c == 'u' { undo = true; escape = true; }
-                else { undo = false; escape = false;}
                 continue;
             }
+
             if c == '\\' {
                 escape = true;
-            } else {
-                ret.push(StyledChar{ style: current_style.clone(), content: c });
+                continue;
             }
+
+            ret.push(StyledChar{ style: current_style.clone(), content: c });
         }
         Content::RichText(ret)
     }

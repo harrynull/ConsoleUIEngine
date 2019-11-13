@@ -12,10 +12,11 @@ mod gol;
 static mut PROGRESS: usize = 0;
 static SPEED: usize = 8;
 static TEXT: &str = "Hello! This is a test message!";
-static LONG_TEXT: &str = "                                            Terms and Conditions\n\
-            \\rRed \\Uunderline\\uU \\G\\bblue \\dblack\\C \\bcolor \\ctest! \
-            The quick brown fox jumps over the lazy dog. <force\nnewline> The quick brown FOX jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
-            The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
+static LONG_TEXT: &str = "                                            <bold>Terms and Conditions</bold>\n\
+            <fore:red>Red <underline>underline</></><back:blue>blue <fore:black>black</> blue</> \
+            <reverse>The quick brown fox jumps over the lazy dog.</reverse> \\<force\nnewline>\
+            <fore:rgb(255,182,193)>RGB Color Test! (255,182,193)</> The quick brown fox jumps over the lazy dog. \
+            <fore:Blue>The quick brown fox</> <fore:Dark_Blue>jumps</> over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
             The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. \
@@ -23,7 +24,7 @@ static LONG_TEXT: &str = "                                            Terms and 
             The quick brown fox jumps over the lazy dog. longwordendwithanewlinesymbollongwordendwithanewlinesymbol\n\
 Try to use up rest of the line: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
-            \n\n\\UParagraph 2:\\uU\n\
+            \n\n<underline>Paragraph 2</underline>\n\
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere, lacus ac mattis blandit, odio erat mollis turpis, id\
             convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
             pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.";

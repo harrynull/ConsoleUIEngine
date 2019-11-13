@@ -15,7 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="09604bd4-fe9e-4e4d-83f6-8ea38ac56812" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/content.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/content.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_ui/ui_components/text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -118,6 +120,9 @@
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
     <option name="version" value="2" />
   </component>
+  <component name="ServiceViewManager">
+    <option name="showServicesTree" value="false" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -145,7 +150,7 @@
       <workItem from="1573342782503" duration="8030000" />
       <workItem from="1573351660693" duration="4760000" />
       <workItem from="1573441114847" duration="2571000" />
-      <workItem from="1573604069633" duration="655000" />
+      <workItem from="1573604069633" duration="5150000" />
     </task>
     <servers />
   </component>

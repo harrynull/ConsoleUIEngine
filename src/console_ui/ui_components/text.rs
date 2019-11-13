@@ -134,6 +134,7 @@ fn break_line_rich_text_normal(content: Vec<StyledChar>, size: (u16, u16)) -> Ve
     }
     ret
 }
+
 fn wrap_content(content: Content, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
     match content {
         Content::Plain(c, style) => { match wrap_type {
