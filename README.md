@@ -32,4 +32,4 @@ It is strongly discouraged to use it in production environment. Criticism, feedb
 Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: https://raw.githubusercontent.com/harrynull/ConsoleUIEngine/master/docs/screenshot.png
