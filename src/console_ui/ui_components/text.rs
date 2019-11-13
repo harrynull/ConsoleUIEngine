@@ -24,7 +24,7 @@ pub struct Text {
     raw_content: Content,
 });
 
-fn break_line_str(content: String, wrap_type: WordWrap, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
+fn break_line_str_break(content: String, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
     let (w,h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
@@ -65,6 +65,41 @@ fn break_line_rich_text_break(content: Vec<StyledChar>, size: (u16, u16)) -> Vec
     ret
 }
 
+fn break_line_str_normal(content: String, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
+    let w = size.0 as usize;
+    let mut ret = Vec::new();
+    let mut current_line = String::new();
+    let mut current_word = String::new();
+    for c in content.chars() {
+        let char_val = c;
+        if char_val != '\n' { current_word.push( c); }
+        if char_val == ' ' || char_val == '\n' { // a new word
+            while current_line.len() + current_word.len() > w { // if the current line cannot contain this word
+                if current_word.len() > w { // break the word if the word is too long to be contained in one line
+                    let (cur, nxt) = current_word.split_at_mut(w-current_line.len());
+                    current_line.push_str(&mut cur.to_string());
+                    current_word = nxt.to_string();
+                }
+                ret.push(Plain(current_line.clone(), style.clone())); // a new line required
+                current_line.clear();
+            }
+            current_line.push_str(&mut current_word);
+        }
+        if char_val =='\n' { // new line required
+            current_line.push_str(&mut current_word);
+            ret.push(Plain(current_line.clone(), style.clone()));
+            current_line.clear();
+        }
+    }
+    if !current_word.is_empty() {
+        current_line.push_str(&mut current_word);
+    }
+    if !current_line.is_empty() {
+        ret.push(Plain(current_line.clone(), style.clone()));
+    }
+    ret
+}
+
 fn break_line_rich_text_normal(content: Vec<StyledChar>, size: (u16, u16)) -> Vec<Content> {
     let w = size.0 as usize;
     let mut ret = Vec::new();
@@ -101,7 +136,10 @@ fn break_line_rich_text_normal(content: Vec<StyledChar>, size: (u16, u16)) -> Ve
 }
 fn wrap_content(content: Content, wrap_type: WordWrap, size: (u16, u16)) -> Vec<Content> {
     match content {
-        Content::Plain(c, style) => { break_line_str(c, wrap_type, size, style) },
+        Content::Plain(c, style) => { match wrap_type {
+            WordWrap::Normal => break_line_str_normal(c, size, style),
+            WordWrap::BreakWord => break_line_str_break(c, size, style),
+        }},
         Content::RichText(c) => { match wrap_type {
             WordWrap::Normal => break_line_rich_text_normal(c, size),
             WordWrap::BreakWord => break_line_rich_text_break(c, size),
