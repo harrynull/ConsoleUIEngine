@@ -24,6 +24,8 @@
 This project is written for me to learn Rust. As such, it might be flawed, slow, and not idiomatic or elegant.
 It is strongly discouraged to use it in production environment. Criticism, feedback, suggestions are welcome and appreciated.
 
+[crossterm](https://github.com/crossterm-rs/crossterm) is used for cross-platform terminal support.
+
 <!-- LICENSE -->
 ## License
 
