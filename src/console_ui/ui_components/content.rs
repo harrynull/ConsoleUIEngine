@@ -28,21 +28,30 @@ impl StyleType {
             "encircled" => { StyleType::Attribute(Attribute::Encircled) }
             "overline" => { StyleType::Attribute(Attribute::OverLined) }
             _ => {
+                let mut rgb: Option<Color> = None;
+                if name[5..].starts_with("rgb"){
+                    let rgb_str = &name[9..name.len()-1];
+                    let mut res=rgb_str.split(',').map(|e|e.trim().parse::<u8>()
+                        .expect(format!("Failed to parse rich text style: RGB not valid: {}",rgb_str.to_string()).as_str()));
+                    let r=res.nth(0).unwrap();
+                    let g=res.nth(0).unwrap();
+                    let b=res.nth(0).unwrap();
+                    println!("{} -> {} {} {}",name.to_string(),r,g,b);
+                    rgb = Some(Color::Rgb { r, g, b });
+                }
+
                 if name.starts_with("fore:") {
-                    if name.starts_with("fore:rgb"){
-                        let rgb = &name[9..name.len()-1];
-                        let mut res=rgb.split(',').map(|e|e.parse::<u8>()
-                            .expect(format!("Failed to parse rich text style: RGB not valid.{}",rgb.to_string()).as_str()));
-                        let r=res.nth(0).unwrap();
-                        let g=res.nth(0).unwrap();
-                        let b=res.nth(0).unwrap();
-                        StyleType::ForegroundColor(Color::Rgb { r, g, b })
-                    }
-                    else {
+                    if let Some(rgb) = rgb{
+                        StyleType::ForegroundColor(rgb)
+                    } else {
                         StyleType::ForegroundColor(Color::from_str(&name[5..]).unwrap())
                     }
                 } else {
-                    StyleType::BackgroundColor(Color::from_str(&name[5..]).unwrap())
+                    if let Some(rgb) = rgb {
+                        StyleType::BackgroundColor(rgb)
+                    } else {
+                        StyleType::BackgroundColor(Color::from_str(&name[5..]).unwrap())
+                    }
                 }
             }
         }
