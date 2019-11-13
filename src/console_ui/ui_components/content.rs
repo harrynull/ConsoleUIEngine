@@ -36,7 +36,6 @@ impl StyleType {
                     let r=res.nth(0).unwrap();
                     let g=res.nth(0).unwrap();
                     let b=res.nth(0).unwrap();
-                    println!("{} -> {} {} {}",name.to_string(),r,g,b);
                     rgb = Some(Color::Rgb { r, g, b });
                 }
 
