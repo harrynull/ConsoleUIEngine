@@ -8,9 +8,6 @@ use crate::console_ui::ui_components::*;
 
 mod console_ui;
 
-static mut PROGRESS: usize = 0;
-static SPEED: usize = 8;
-static TEXT: &str = "Hello! This is a test message!";
 /*
 To generate the rainbow:
 
@@ -75,17 +72,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.";
 
 fn update_callback(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo) {
-    {
-        get_child!(scene, "button", Button, button, _button);
-        //get_child!(scene, "input", Input, input, _input);
-        //get_child!(scene, "input2", Input, input2, _input2);
-        get_child_mut!(scene, "label", Label, label, _label);
-        if unsafe { PROGRESS } < TEXT.len() * SPEED {
-            unsafe { PROGRESS += 1; }
-            let current = unsafe { PROGRESS };
-            label.replace_content(Content::from_string(TEXT[..current / SPEED].to_string()));
-        }
-    }
     if {
         get_child!(scene, "button", Button, button, _button);
         button.is_pressed()
@@ -109,7 +95,7 @@ fn first_scene() -> Scene {
         Rectangle {"rectangle", (1, 2), (115, 25)},
         Text {"text",Content::from_string_parse_style(LONG_TEXT.to_string()), (5, 3), (109, 15)},
         Input {"input", "Type your username here".to_string(), (5, 25)},
-        Label {"label",Content::from_string("Hello, world!".to_string()), (5, 23)},
+        Typer {"label", Content::from_string("Hello! This is a test message!".to_string()), (5, 23), 8},
         Checkbox {"checkbox", "I have read and agreed to the above Terms and Conditions".to_string(), (30, 24)},
         Button {"button", "Start".to_string(), (55, 25)}
     ];
@@ -120,7 +106,7 @@ fn second_scene() -> Scene {
     let mut scene = console_ui::Scene::new("test scene", update_callback2);
     add_elements![scene:
         Rectangle {"rectangle", (1, 2), (115, 25)},
-        Text {"text", Content::from_string("Scene 2!".to_string()), (5, 3), (109, 15)}
+        Label {"text", Content::from_string("Scene 2!".to_string()), (5, 3)}
     ];
     scene
 }

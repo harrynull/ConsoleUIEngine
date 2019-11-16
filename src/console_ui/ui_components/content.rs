@@ -4,6 +4,7 @@ use crossterm::style::{Attribute, Color, ContentStyle};
 
 use crate::console_ui::StyledChar;
 use std::str::FromStr;
+use std::ops::Index;
 
 enum StyleType {
     ForegroundColor(Color),
@@ -150,8 +151,16 @@ impl Content{
 
     pub fn len(&self) -> usize {
         match self{
-            Content::Plain(c, s) => { c.len() },
+            Content::Plain(c, _s) => { c.len() },
             Content::RichText(c) => { c.len() },
         }
     }
+
+    pub fn substr(&self, low: usize, high: usize) -> Content {
+        match self{
+            Content::Plain(c, s) => { Content::Plain(c[low..high].to_string(), s.clone()) },
+            Content::RichText(c) => { Content::RichText(c.as_slice()[low..high].to_vec()) },
+        }
+    }
 }
+
