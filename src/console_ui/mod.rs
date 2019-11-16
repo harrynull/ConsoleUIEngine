@@ -25,14 +25,15 @@ pub struct Scene {
     current_focused: usize,
     name: &'static str,
     focused: bool,
+    update_callback: fn(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo),
 }
 
 impl Scene {
     pub fn add_element(&mut self, element: Box<dyn UiElement>){
         self.elements.push(Rc::new(RefCell::new(element)));
     }
-    pub fn new(name: &'static str) -> Scene {
-        Scene {elements: vec![], name, focused: false, current_focused: 0 }
+    pub fn new(name: &'static str, update_callback: fn(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo)) -> Scene {
+        Scene {elements: vec![], name, focused: false, current_focused: 0, update_callback }
     }
     pub fn find_child<T>(&self, name: &str) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> where T: UiElement, T: 'static {
         self.elements.iter().find(|e|e.borrow().get_name() == name)
@@ -86,6 +87,7 @@ impl UiElement for Scene {
                 }
             }
         }
+        (self.update_callback)(self, console);
         for element in &mut self.elements{
             element.borrow_mut().update(console);
         }
@@ -103,6 +105,8 @@ impl UiElement for Scene {
 pub struct ConsoleUpdateInfo {
     cursor_pos: (u16, u16),
     input_events: InputEvents,
+    exit: bool,
+    new_scene: Option<Scene>,
 }
 
 impl ConsoleUpdateInfo {
@@ -112,6 +116,8 @@ impl ConsoleUpdateInfo {
     pub fn set_cursor(&mut self, new_cursor_pos: (u16, u16)) {
         self.cursor_pos = new_cursor_pos;
     }
+    pub fn request_exit(&mut self) { self.exit = true; }
+    pub fn new_scene(&mut self, scene: Scene) { self.new_scene = Some(scene); }
 }
 
 pub struct Console {
@@ -180,12 +186,18 @@ impl Console {
         let mut reader = input.read_async();
         loop{
             let mut update_info = ConsoleUpdateInfo {
-                cursor_pos: self.cursor_pos, input_events: InputEvents::new(&mut reader)
+                cursor_pos: self.cursor_pos,
+                input_events: InputEvents::new(&mut reader),
+                exit: false,
+                new_scene: None
             };
             update_callback(self, &mut update_info);
             self.update(&mut update_info);
             self.render();
-            if self.should_stop { break; }
+            if self.should_stop || update_info.exit { break; }
+            if let Some(scene) = update_info.new_scene {
+                self.add_scene(scene);
+            }
             sleep(Duration::from_millis(10));
         }
     }

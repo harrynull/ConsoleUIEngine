@@ -9,10 +9,12 @@ use crate::console_ui::ui_components::Content::Plain;
 
 use super::super::SizedBuffer;
 use super::super::UiElement;
+use crossterm::input::KeyEvent;
 
 ui_component_struct!(
 pub struct Button {
     pub text: Label,
+    pressed: bool,
 });
 
 impl Button {
@@ -21,8 +23,11 @@ impl Button {
             name,
             focused: false,
             text: Label::new("", Content::from_string(content), position),
+            pressed: false
         }
     }
+
+    pub fn is_pressed(&self) -> bool { self.pressed }
 }
 
 impl UiElement for Button {
@@ -40,15 +45,25 @@ impl UiElement for Button {
                 attributes: vec![]
             })
         };
-
         if let Plain(_, ref mut s) = &mut self.text.get_content_mut() {
             *s = style;
         }
+
+        self.pressed = false;
+        if self.focused {
+            for event in &console.get_events().key_events {
+                if let KeyEvent::Enter = event {
+                    self.pressed = true;
+                }
+            }
+        }
+
         self.text.update(console);
     }
     fn render(&self, buffer: &mut SizedBuffer) {
         self.text.render(buffer);
     }
+
     ui_component_impl!();
 
     fn is_focusable(&self) -> bool { true }

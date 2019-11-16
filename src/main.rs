@@ -74,25 +74,37 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             convallis velit magna nec ligula. Praesent nec lorem aliquet, eleifend erat in, interdum enim. Etiam lectus dui, consectetur eget\
             pulvinar vel, gravida in magna. Praesent vitae ipsum massa. Duis eu erat eget nisl viverra maximus vel a turpis.";
 
-fn update_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
-    for event in &update_info.get_events().key_events {
-        if let KeyEvent::Esc = event { console.exit(); }
+fn update_callback(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo) {
+    {
+        get_child!(scene, "button", Button, button, _button);
+        //get_child!(scene, "input", Input, input, _input);
+        //get_child!(scene, "input2", Input, input2, _input2);
+        get_child_mut!(scene, "label", Label, label, _label);
+        if unsafe { PROGRESS } < TEXT.len() * SPEED {
+            unsafe { PROGRESS += 1; }
+            let current = unsafe { PROGRESS };
+            label.replace_content(Content::from_string(TEXT[..current / SPEED].to_string()));
+        }
     }
-    let scene = console.get_current_scene_mut().unwrap();
-    //get_child!(scene, "input", Input, input, _input);
-    //get_child!(scene, "input2", Input, input2, _input2);
-    get_child_mut!(scene, "label", Label, label, _label);
-    if unsafe { PROGRESS } < TEXT.len()*SPEED {
-        unsafe { PROGRESS +=1; }
-        let current = unsafe { PROGRESS };
-        label.replace_content(Content::from_string(TEXT[..current/SPEED].to_string()));
+    if {
+        get_child!(scene, "button", Button, button, _button);
+        button.is_pressed()
+    } {
+        update_info.new_scene(second_scene());
     }
-
 }
 
-fn main() {
-    let mut ui = console_ui::Console::new();
-    let mut scene = console_ui::Scene::new("test scene");
+fn update_callback2(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo) {
+}
+
+fn main_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
+    if update_info.get_events().key_events.iter().find(|e| **e==KeyEvent::Esc).is_some() {
+        update_info.request_exit();
+    }
+}
+
+fn first_scene() -> Scene {
+    let mut scene = console_ui::Scene::new("test scene", update_callback);
     add_elements![scene:
         Rectangle {"rectangle", (1, 2), (115, 25)},
         Text {"text",Content::from_string_parse_style(LONG_TEXT.to_string()), (5, 3), (109, 15)},
@@ -101,6 +113,21 @@ fn main() {
         Checkbox {"checkbox", "I have read and agreed to the above Terms and Conditions".to_string(), (30, 24)},
         Button {"button", "Start".to_string(), (55, 25)}
     ];
-    ui.add_scene(scene);
-    ui.main_loop(update_callback);
+    scene
+}
+
+fn second_scene() -> Scene {
+    let mut scene = console_ui::Scene::new("test scene", update_callback2);
+    add_elements![scene:
+        Rectangle {"rectangle", (1, 2), (115, 25)},
+        Text {"text", Content::from_string("Scene 2!".to_string()), (5, 3), (109, 15)}
+    ];
+    scene
+}
+
+
+fn main() {
+    let mut ui = console_ui::Console::new();
+    ui.add_scene(first_scene());
+    ui.main_loop(main_callback);
 }
