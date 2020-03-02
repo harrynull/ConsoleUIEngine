@@ -6,6 +6,7 @@ pub use self::label::*;
 pub use self::rectangle::*;
 pub use self::text::*;
 pub use self::typer::*;
+pub use self::fps_indicator::*;
 
 //use super::ui_elements;
 mod content;
@@ -16,3 +17,4 @@ mod input;
 mod button;
 mod checkbox;
 mod typer;
+mod fps_indicator;
