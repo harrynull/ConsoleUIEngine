@@ -17,6 +17,7 @@ pub struct GameOfLife {
     size: (usize, usize),
     map: Vec<u8>
 });
+// GameOfLife code adapted from https://leetcode.com/problems/game-of-life/discuss/429213/0ms-Rust-Solution
 impl GameOfLife {
     pub fn get_cell(&self, x: usize, y: usize) -> u8 {
         return self.map[y * self.size.0 + x]
@@ -31,17 +32,17 @@ impl GameOfLife {
         let height = self.size.1;
         let width = self.size.0;
 
-        if coord.0 + 1 >= 0 && coord.0 + 1 < width && coord.1 + 1 >= 0 && coord.1 + 1 < height {
+        if coord.0 + 1 < width && coord.1 + 1 < height {
             if self.get_cell(coord.0 + 1, coord.1 + 1) & 1 == 1 {
                 ret += 1;
             }
         }
-        if coord.0 + 1 >= 0 && coord.0 + 1 < width && coord.1 >= 1 && coord.1 < height + 1 {
+        if coord.0 + 1 < width && coord.1 >= 1 && coord.1 < height + 1 {
             if self.get_cell(coord.0 + 1, coord.1 - 1) & 1 == 1 {
                 ret += 1;
             }
         }
-        if coord.0 >= 1 && coord.0 < width + 1 && coord.1 + 1 >= 0 && coord.1 + 1 < height {
+        if coord.0 >= 1 && coord.0 < width + 1 && coord.1 + 1 < height {
             if self.get_cell(coord.0 - 1, coord.1 + 1)  & 1 == 1 {
                 ret += 1;
             }
@@ -51,22 +52,22 @@ impl GameOfLife {
                 ret += 1;
             }
         }
-        if coord.0 + 1 >= 0 && coord.0 + 1 < width && coord.1 >= 0 && coord.1 < height {
+        if coord.0 + 1 < width && coord.1 < height {
             if self.get_cell(coord.0 + 1, coord.1)  & 1 == 1 {
                 ret += 1;
             }
         }
-        if coord.0 >= 1 && coord.0 < width + 1 && coord.1 >= 0 && coord.1 < height {
+        if coord.0 >= 1 && coord.0 < width + 1 && coord.1 < height {
             if self.get_cell(coord.0 - 1, coord.1)  & 1 == 1 {
                 ret += 1;
             }
         }
-        if coord.0 >= 0 && coord.0 < width && coord.1 + 1 >= 0 && coord.1 + 1 < height {
+        if coord.0 < width && coord.1 + 1 < height {
             if self.get_cell(coord.0, coord.1 + 1)  & 1 == 1 {
                 ret += 1;
             }
         }
-        if coord.0 >= 0 && coord.0 < width && coord.1 >= 1 && coord.1 < height + 1 {
+        if coord.0 < width && coord.1 >= 1 && coord.1 < height + 1 {
             if self.get_cell(coord.0, coord.1 - 1)  & 1 == 1 {
                 ret += 1;
             }
