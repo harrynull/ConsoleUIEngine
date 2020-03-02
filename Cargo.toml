@@ -1,8 +1,9 @@
 [package]
-name = "console_ui_engine"
+name = "console_ui_engine_null"
 version = "0.1.0"
-authors = ["Harry Null <harryyunull@gmail.com>"]
+authors = ["Harry Yu <harryyunull@gmail.com>"]
 edition = "2018"
+repository = "https://github.com/harrynull/ConsoleUIEngine"
 
 [dependencies]
 crossterm = "0.13.2"

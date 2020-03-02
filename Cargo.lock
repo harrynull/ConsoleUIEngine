@@ -19,7 +19,7 @@ version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "console_ui_engine"
+name = "console_ui_engine_null"
 version = "0.1.0"
 dependencies = [
  "crossterm 0.13.2 (registry+https://github.com/rust-lang/crates.io-index)",
