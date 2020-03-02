@@ -4,6 +4,12 @@ version = "0.1.0"
 authors = ["Harry Yu <harryyunull@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/harrynull/ConsoleUIEngine"
+exclude = [
+    "docs/*",
+    "src/main.rs",
+    "src/example_text.txt",
+	".github/"
+]
 
 [dependencies]
 crossterm = "0.13.2"
