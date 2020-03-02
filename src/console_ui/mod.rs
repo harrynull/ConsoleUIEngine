@@ -1,3 +1,4 @@
+#[cfg(windows)] extern crate winapi;
 use std::any::Any;
 use std::cell::{Ref, RefCell, RefMut};
 use std::io::{stdout, Write};
@@ -13,6 +14,7 @@ use crossterm::terminal::{ClearType, size};
 pub use buffer::*;
 pub use input_events::*;
 pub use ui_element::*;
+use crossterm::input::MouseEvent::Press;
 
 mod buffer;
 mod input_events;
@@ -20,28 +22,52 @@ mod input_events;
 mod ui_element;
 pub mod ui_components;
 
+#[cfg(windows)]
+fn disable_quick_edit() {
+    use winapi::um::consoleapi::SetConsoleMode;
+    use winapi::um::wincon::{ENABLE_EXTENDED_FLAGS, ENABLE_WINDOW_INPUT, ENABLE_MOUSE_INPUT};
+    use winapi::um::winbase::STD_INPUT_HANDLE;
+    use winapi::um::processenv::GetStdHandle;
+    unsafe {
+        let handle = GetStdHandle(STD_INPUT_HANDLE);
+        SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);
+        SetConsoleMode(handle, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+    };
+}
+#[cfg(not(windows))]
+fn disable_quick_edit() {
+}
+
 pub struct Scene {
     elements: Vec<Rc<RefCell<Box<dyn UiElement>>>>,
-    current_focused: usize,
     name: &'static str,
+    current_focused: usize,
+    nothing_focused: bool,
     focused: bool,
+    focusable_elements_count: usize,
     update_callback: fn(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo),
 }
 
 impl Scene {
     pub fn add_element(&mut self, element: Box<dyn UiElement>){
+        if element.is_focusable() {
+            self.focusable_elements_count += 1;
+        }
         self.elements.push(Rc::new(RefCell::new(element)));
     }
     pub fn new(name: &'static str, update_callback: fn(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo)) -> Scene {
-        Scene {elements: vec![], name, focused: false, current_focused: 0, update_callback }
+        Scene {elements: vec![], name, focused: false, current_focused: 0, nothing_focused: true, focusable_elements_count: 0, update_callback }
     }
     pub fn find_child<T>(&self, name: &str) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> where T: UiElement, T: 'static {
         self.elements.iter().find(|e|e.borrow().get_name() == name)
     }
-    fn get_focused_element(&mut self) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> {
+    fn get_nth_focusable_element(&mut self, n: usize) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> {
         self.elements.iter()
             .filter(|e| e.borrow().is_focusable()).cycle()
-            .nth(self.current_focused)
+            .nth(n)
+    }
+    fn get_focused_element(&mut self) -> Option<&Rc<RefCell<Box<dyn UiElement>>>> {
+        self.get_nth_focusable_element(self.current_focused)
     }
 }
 
@@ -72,6 +98,11 @@ macro_rules! add_elements {
 
 impl UiElement for Scene {
     fn update(&mut self, console: &mut ConsoleUpdateInfo) {
+        if self.nothing_focused && self.focusable_elements_count != 0 {
+            self.get_nth_focusable_element(0).unwrap().borrow_mut().on_focus(); // focus the first element
+        }
+
+        // Processing keyboard events related to focus
         for event in &console.get_events().key_events {
             if let KeyEvent::Tab | KeyEvent::BackTab = event {
                 if let Some(e) = self.get_focused_element() {
@@ -81,12 +112,38 @@ impl UiElement for Scene {
                     }else if self.current_focused > 0 {
                         self.current_focused -= 1
                     }else if self.current_focused == 0 {
-                        self.current_focused = self.elements.len() - 1;
+                        self.current_focused = self.focusable_elements_count - 1;
                     }
                     self.get_focused_element().unwrap().borrow_mut().on_focus();
                 }
             }
         }
+
+        // Processing mouse click events related to focus
+        let old_focused = self.current_focused;
+        let mut focusable_id = 0;
+        for event in &console.get_events().mouse_events {
+            if let Press(press, x, y) = event {
+                for (i, element) in &mut self.elements.iter_mut().enumerate() {
+                    let focusable = element.borrow().is_focusable();
+                    if focusable && element.borrow().is_clicked(*x, *y) {
+                        self.current_focused = focusable_id;
+                        break;
+                    }
+                    if focusable {
+                        focusable_id += 1;
+                    }
+                }
+            }
+            if old_focused != self.current_focused {
+                if let Some(e) = self.get_nth_focusable_element(old_focused) {
+                    e.borrow_mut().on_focus_removed();
+                }
+                self.get_focused_element().unwrap().borrow_mut().on_focus();
+                break;
+            }
+        }
+
         (self.update_callback)(self, console);
         for element in &mut self.elements{
             element.borrow_mut().update(console);
@@ -180,6 +237,7 @@ impl Console {
     }
 
     pub fn main_loop(&mut self, update_callback: fn(console: &mut Console, update_info: &mut ConsoleUpdateInfo)){
+        disable_quick_edit();
         let _raw = RawScreen::into_raw_mode();
         stdout().execute(terminal::Clear(ClearType::All)).unwrap();
         let input = input::input();

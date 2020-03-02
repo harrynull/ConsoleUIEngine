@@ -11,6 +11,7 @@ pub trait UiElement {
     fn get_name(&self) -> &str;
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
+    fn is_clicked(&self, x: u16, y: u16) -> bool { false }
 
     fn is_focusable(&self) -> bool {false}
     fn has_focus(&self) -> bool;

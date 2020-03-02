@@ -10,6 +10,7 @@ use crate::console_ui::ui_components::Content::Plain;
 use super::super::SizedBuffer;
 use super::super::UiElement;
 use crossterm::input::KeyEvent;
+use crossterm::input::MouseEvent::Press;
 
 ui_component_struct!(
 pub struct Button {
@@ -56,6 +57,13 @@ impl UiElement for Button {
                     self.pressed = true;
                 }
             }
+            for event in &console.get_events().mouse_events {
+                if let Press(press, x, y) = event {
+                    if self.is_clicked(*x, *y) {
+                        self.pressed = true;
+                    }
+                }
+            }
         }
 
         self.text.update(console);
@@ -63,6 +71,8 @@ impl UiElement for Button {
     fn render(&self, buffer: &mut SizedBuffer) {
         self.text.render(buffer);
     }
+
+    fn is_clicked(&self, x: u16, y: u16) -> bool { self.text.is_clicked(x, y) }
 
     ui_component_impl!();
 

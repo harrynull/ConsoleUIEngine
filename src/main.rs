@@ -154,16 +154,16 @@ impl UiElement for GameOfLife {
         let width = self.size.0;
         for j in 0..height {
             for i in 0..width {
-                if self.get_cell(i, j) == 1 {
-                    buffer.set_pixel(&StyledChar {
-                        style: ContentStyle {
-                            foreground_color: None,
-                            background_color: Some(color(i, j, self.size)),
-                            attributes: vec![]
-                        },
-                        content: ' '
-                    }, i as u16, j as u16);
-                }
+                buffer.set_pixel(&StyledChar {
+                    style: ContentStyle {
+                        foreground_color: None,
+                        background_color: if self.get_cell(i, j) == 1
+                                            { Some(color(i, j, self.size))}
+                                            else { None },
+                        attributes: vec![]
+                    },
+                    content: ' '
+                }, i as u16, j as u16);
             }
         }
     }

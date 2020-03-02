@@ -181,5 +181,11 @@ impl UiElement for Text {
             y_offset += 1;
         }
     }
+
+    fn is_clicked(&self, x: u16, y: u16) -> bool {
+        x >= self.position.0 && x < self.position.0 + self.size.0
+            && y >= self.position.1 && y <= self.position.1 + self.content.len() as u16
+    }
+
     ui_component_impl!();
 }

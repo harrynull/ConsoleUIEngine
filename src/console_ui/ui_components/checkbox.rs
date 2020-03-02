@@ -10,6 +10,7 @@ use crate::console_ui::ui_components::Content;
 use super::Label;
 use super::super::SizedBuffer;
 use super::super::UiElement;
+use crossterm::input::MouseEvent::Press;
 
 ui_component_struct!(
 pub struct Checkbox {
@@ -39,18 +40,29 @@ impl UiElement for Checkbox {
                     self.selected = !self.selected;
                 }
             }
+            for event in &console.get_events().mouse_events {
+                if let Press(press, x, y) = event {
+                    if self.is_clicked(*x, *y) {
+                        self.selected = !self.selected;
+                    }
+                }
+            }
+
             text_style = Some(ContentStyle{
                 foreground_color: Some(style::Color::Green),
                 background_color: None,
                 attributes: vec![style::Attribute::Underlined]
             });
         }
+
         self.text.replace_content(Content::from_string_styled(
             (if self.selected { "[x] " } else { "[ ] " }).to_string() + &self.content,
             text_style));
         self.text.update(console);
     }
     fn render(&self, buffer: &mut SizedBuffer) { self.text.render(buffer); }
+
+    fn is_clicked(&self, x: u16, y: u16) -> bool { self.text.is_clicked(x, y) }
 
     ui_component_impl!();
 

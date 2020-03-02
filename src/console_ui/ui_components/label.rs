@@ -64,5 +64,11 @@ impl UiElement for Label {
     fn render(&self, buffer: &mut SizedBuffer) {
         render_line(buffer, &self.content, self.position);
     }
+
+    fn is_clicked(&self, x: u16, y: u16) -> bool {
+        x >= self.position.0 && x < self.position.0 + self.content.len() as u16
+            && y == self.position.1
+    }
+
     ui_component_impl!();
 }

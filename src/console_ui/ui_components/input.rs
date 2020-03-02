@@ -68,6 +68,9 @@ impl UiElement for Input {
     fn render(&self, buffer: &mut SizedBuffer) {
         self.text.render(buffer);
     }
+
+    fn is_clicked(&self, x: u16, y: u16) -> bool { self.text.is_clicked(x, y) }
+
     ui_component_impl!();
 
     fn is_focusable(&self) -> bool { true }

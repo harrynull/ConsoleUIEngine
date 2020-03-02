@@ -7,3 +7,6 @@ edition = "2018"
 [dependencies]
 crossterm = "0.13.2"
 rand = "0.7.2"
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["winuser"] }
