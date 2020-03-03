@@ -18,7 +18,7 @@
 [![GitHub][license-badge]](https://github.com/harrynull/ConsoleUIEngine/blob/master/LICENSE)
 ![GitHub Workflow Status][workflow-badge]
     
-    A console UI engine written to learn Rust! (so not production-ready or representative of good Rust practices of course)
+A console UI engine written to learn Rust! (so not production-ready or representative of good Rust practices of course)
   </p>
 </p>
 
@@ -35,7 +35,7 @@ It is strongly discouraged to use it in production environment. Criticism, feedb
 
 ## Features
 * Cross-platform
-* <span style="color:red">R</span><span style="color:green">G</span><span style="color:blue">B</span> support!
+* RGB support!
 * Mouse and keyboard events support
 * UI Components
   * button
