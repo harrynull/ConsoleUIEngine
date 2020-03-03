@@ -6,7 +6,6 @@ edition = "2018"
 repository = "https://github.com/harrynull/ConsoleUIEngine"
 exclude = [
     "docs/*",
-    "examples/",
 	".github/"
 ]
 

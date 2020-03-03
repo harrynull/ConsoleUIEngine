@@ -1,14 +1,11 @@
 use std::any::Any;
-
-use crossterm::style;
-use crossterm::style::{ContentStyle, StyledContent};
-
 use std::time::{SystemTime, UNIX_EPOCH};
-use crate::ui_components::Content;
-use crate::console::ConsoleUpdateInfo;
-use crate::ui_element::UiElement;
+
 use crate::buffer::SizedBuffer;
+use crate::console::ConsoleUpdateInfo;
+use crate::ui_components::Content;
 use crate::ui_components::Label;
+use crate::ui_element::UiElement;
 
 ui_component_struct!(
 pub struct FpsIndicator {

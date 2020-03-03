@@ -1,4 +1,5 @@
 use std::any::Any;
+
 use crate::buffer::{SizedBuffer, StyledChar};
 use crate::ui_element::UiElement;
 

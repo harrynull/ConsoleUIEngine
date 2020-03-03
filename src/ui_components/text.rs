@@ -1,10 +1,9 @@
 use std::any::Any;
 
-use crossterm::style;
-use crossterm::style::{ContentStyle, StyledContent};
+use crossterm::style::ContentStyle;
 
+use crate::buffer::{SizedBuffer, StyledChar};
 use crate::ui_components::{Content, render_line};
-use crate::buffer::{StyledChar, SizedBuffer};
 use crate::ui_components::Content::{Plain, RichText};
 use crate::ui_element::UiElement;
 
@@ -22,7 +21,7 @@ pub struct Text {
 });
 
 fn break_line_str_break(content: String, size: (u16, u16), style: Option<ContentStyle>) -> Vec<Content> {
-    let (w,h) = size;
+    let (w, _h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
     let mut current_line = String::new();
@@ -42,7 +41,7 @@ fn break_line_str_break(content: String, size: (u16, u16), style: Option<Content
 }
 
 fn break_line_rich_text_break(content: Vec<StyledChar>, size: (u16, u16)) -> Vec<Content> {
-    let (w,h) = size;
+    let (w, _h) = size;
     let mut cnt = 0;
     let mut ret = Vec::new();
     let mut current_line = Vec::new();

@@ -27,11 +27,7 @@ fn update_callback(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo) {
     }
 }
 
-fn update_callback2(scene: &mut Scene, update_info: &mut ConsoleUpdateInfo) {
-
-}
-
-fn main_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
+fn main_callback(_console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
     if update_info.get_events().key_events.iter().find(|e| **e==KeyEvent::Esc).is_some() {
         update_info.request_exit();
     }
@@ -55,7 +51,8 @@ fn first_scene() -> Scene {
 }
 
 fn second_scene() -> Scene {
-    let mut scene = Scene::new("test scene", update_callback2);
+    let mut scene = Scene::new("test scene",
+                               |_scene: &mut Scene, _update_info: &mut ConsoleUpdateInfo| {});
     add_elements![scene:
         FpsIndicator {"fps", (0, 0)}
     ];

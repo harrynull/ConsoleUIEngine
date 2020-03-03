@@ -1,15 +1,18 @@
-use crate::input_events::InputEvents;
-use crate::scene::Scene;
+#[cfg(windows)] extern crate winapi;
+
 use std::io::{stdout, Write};
-use crossterm::{cursor, ExecutableCommand, input, Output, queue, Result, style, terminal};
-use crossterm::terminal::{ClearType, size};
 use std::thread::sleep;
 use std::time::Duration;
+
+use crossterm::{cursor, ExecutableCommand, input, queue, Result, style, terminal};
 use crossterm::screen::RawScreen;
+use crossterm::terminal::{ClearType, size};
+
 use crate::buffer::SizedBuffer;
+use crate::input_events::InputEvents;
+use crate::scene::Scene;
 use crate::ui_element::UiElement;
 
-#[cfg(windows)] extern crate winapi;
 
 #[cfg(windows)]
 fn disable_quick_edit() {

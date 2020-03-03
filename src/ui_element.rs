@@ -1,6 +1,7 @@
 pub use std::any::Any;
-use crate::console::ConsoleUpdateInfo;
+
 use crate::buffer::SizedBuffer;
+use crate::console::ConsoleUpdateInfo;
 
 pub trait UiElement {
     fn update(&mut self, _console: &mut ConsoleUpdateInfo) {}
@@ -8,7 +9,7 @@ pub trait UiElement {
     fn get_name(&self) -> &str;
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
-    fn is_clicked(&self, x: u16, y: u16) -> bool { false }
+    fn is_clicked(&self, _x: u16, _y: u16) -> bool { false }
 
     fn is_focusable(&self) -> bool {false}
     fn has_focus(&self) -> bool;

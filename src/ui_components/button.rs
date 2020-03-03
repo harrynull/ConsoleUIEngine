@@ -1,16 +1,16 @@
 use std::any::Any;
 
+use crossterm::input::KeyEvent;
+use crossterm::input::MouseEvent::Press;
 use crossterm::style;
 use crossterm::style::ContentStyle;
 
-use crossterm::input::KeyEvent;
-use crossterm::input::MouseEvent::Press;
-use crate::ui_components::Content;
-use crate::ui_element::UiElement;
-use crate::console::ConsoleUpdateInfo;
-use crate::ui_components::Content::Plain;
 use crate::buffer::SizedBuffer;
+use crate::console::ConsoleUpdateInfo;
+use crate::ui_components::Content;
+use crate::ui_components::Content::Plain;
 use crate::ui_components::Label;
+use crate::ui_element::UiElement;
 
 ui_component_struct!(
 pub struct Button {
@@ -58,7 +58,7 @@ impl UiElement for Button {
                 }
             }
             for event in &console.get_events().mouse_events {
-                if let Press(press, x, y) = event {
+                if let Press(_, x, y) = event {
                     if self.is_clicked(*x, *y) {
                         self.pressed = true;
                     }

@@ -1,11 +1,13 @@
 use std::any::Any;
-use std::cell::{Ref, RefCell, RefMut};
-use std::rc::{Rc, Weak};
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crossterm::input::KeyEvent;
 use crossterm::input::MouseEvent::Press;
-use crate::ui_element::UiElement;
-use crate::console::ConsoleUpdateInfo;
+
 use crate::buffer::SizedBuffer;
+use crate::console::ConsoleUpdateInfo;
+use crate::ui_element::UiElement;
 
 pub struct Scene {
     elements: Vec<Rc<RefCell<Box<dyn UiElement>>>>,
@@ -92,8 +94,8 @@ impl UiElement for Scene {
         let old_focused = self.current_focused;
         let mut focusable_id = 0;
         for event in &console.get_events().mouse_events {
-            if let Press(press, x, y) = event {
-                for (i, element) in &mut self.elements.iter_mut().enumerate() {
+            if let Press(_, x, y) = event {
+                for element in &mut self.elements {
                     let focusable = element.borrow().is_focusable();
                     if focusable && element.borrow().is_clicked(*x, *y) {
                         self.current_focused = focusable_id;

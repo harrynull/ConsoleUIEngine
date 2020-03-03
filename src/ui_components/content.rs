@@ -1,9 +1,7 @@
-use std::thread::current;
+use std::str::FromStr;
 
 use crossterm::style::{Attribute, Color, ContentStyle};
 
-use std::str::FromStr;
-use std::ops::Index;
 use crate::buffer::StyledChar;
 
 enum StyleType {
