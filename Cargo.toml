@@ -4,6 +4,8 @@ version = "0.1.0"
 authors = ["Harry Yu <harryyunull@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/harrynull/ConsoleUIEngine"
+description = "A console UI engine written to learn Rust"
+license = "MIT"
 exclude = [
     "docs/*",
 	".github/"
