@@ -3,11 +3,9 @@ use std::any::Any;
 use crossterm::style;
 use crossterm::style::{ContentStyle, StyledContent};
 
-use crate::console_ui::ui_components::Content;
-
-use super::super::SizedBuffer;
-use super::super::StyledChar;
-use super::super::UiElement;
+use crate::ui_components::Content;
+use crate::buffer::{SizedBuffer, StyledChar};
+use crate::ui_element::UiElement;
 
 ui_component_struct!(
 pub struct Label {

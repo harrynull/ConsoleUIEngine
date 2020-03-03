@@ -1,13 +1,11 @@
 use std::any::Any;
 
 use crossterm::input::KeyEvent;
-
-use crate::console_ui::{ConsoleUpdateInfo, InputEvents};
-use crate::console_ui::ui_components::Content;
-
-use super::Label;
-use super::super::SizedBuffer;
-use super::super::UiElement;
+use crate::ui_components::Content;
+use crate::ui_element::UiElement;
+use crate::console::ConsoleUpdateInfo;
+use crate::buffer::SizedBuffer;
+use crate::ui_components::Label;
 
 ui_component_struct!(
 pub struct Input {

@@ -1,16 +1,10 @@
-use std::cell::RefMut;
-use std::rc::Rc;
+use console_ui_engine_null::scene::Scene;
+use console_ui_engine_null::console::{ConsoleUpdateInfo, Console};
+use crossterm::input::KeyEvent;
+use console_ui_engine_null::add_elements;
+use console_ui_engine_null::get_child;
+use console_ui_engine_null::ui_components::*;
 use std::fs;
-use std::any::Any;
-
-use crossterm::input::{KeyEvent, MouseEvent};
-use rand::prelude::*;
-
-use crate::console_ui::{Console, ConsoleUpdateInfo, Scene, UiElement, SizedBuffer, StyledChar};
-use crate::console_ui::ui_components::*;
-use crossterm::style::{ContentStyle, Color};
-
-mod console_ui;
 
 /*  To generate the rainbow:
     def rainbow(hue):
@@ -44,7 +38,7 @@ fn main_callback(console: &mut Console, update_info: &mut ConsoleUpdateInfo) {
 }
 
 fn first_scene() -> Scene {
-    let mut scene = console_ui::Scene::new("test scene", update_callback);
+    let mut scene = Scene::new("test scene", update_callback);
     add_elements![scene:
         Rectangle {"rectangle", (1, 2), (115, 25)},
         Text {"text", Content::from_string_parse_style(
@@ -61,7 +55,7 @@ fn first_scene() -> Scene {
 }
 
 fn second_scene() -> Scene {
-    let mut scene = console_ui::Scene::new("test scene", update_callback2);
+    let mut scene = Scene::new("test scene", update_callback2);
     add_elements![scene:
         FpsIndicator {"fps", (0, 0)}
     ];
@@ -69,7 +63,7 @@ fn second_scene() -> Scene {
 }
 
 fn main() {
-    let mut ui = console_ui::Console::new();
+    let mut ui = Console::new();
     ui.add_scene(first_scene());
     ui.main_loop(main_callback);
 }

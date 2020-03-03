@@ -3,13 +3,10 @@ use std::any::Any;
 use crossterm::style;
 use crossterm::style::{ContentStyle, StyledContent};
 
-use crate::console_ui::ui_components::{Content, render_line};
-use crate::console_ui::ui_components::Content::{Plain, RichText};
-
-use super::super::SizedBuffer;
-use super::super::StyledChar;
-use super::super::UiElement;
-use std::thread::current;
+use crate::ui_components::{Content, render_line};
+use crate::buffer::{StyledChar, SizedBuffer};
+use crate::ui_components::Content::{Plain, RichText};
+use crate::ui_element::UiElement;
 
 pub enum WordWrap {
     Normal, BreakWord

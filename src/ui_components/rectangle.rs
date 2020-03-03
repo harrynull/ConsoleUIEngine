@@ -1,8 +1,6 @@
 use std::any::Any;
-
-use super::super::SizedBuffer;
-use super::super::StyledChar;
-use super::super::UiElement;
+use crate::buffer::{SizedBuffer, StyledChar};
+use crate::ui_element::UiElement;
 
 ui_component_struct!(
 pub struct Rectangle {

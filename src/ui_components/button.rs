@@ -3,14 +3,14 @@ use std::any::Any;
 use crossterm::style;
 use crossterm::style::ContentStyle;
 
-use crate::console_ui::ConsoleUpdateInfo;
-use crate::console_ui::ui_components::{Content, Label};
-use crate::console_ui::ui_components::Content::Plain;
-
-use super::super::SizedBuffer;
-use super::super::UiElement;
 use crossterm::input::KeyEvent;
 use crossterm::input::MouseEvent::Press;
+use crate::ui_components::Content;
+use crate::ui_element::UiElement;
+use crate::console::ConsoleUpdateInfo;
+use crate::ui_components::Content::Plain;
+use crate::buffer::SizedBuffer;
+use crate::ui_components::Label;
 
 ui_component_struct!(
 pub struct Button {
@@ -19,7 +19,7 @@ pub struct Button {
 });
 
 impl Button {
-    pub(crate) fn new(name: &'static str, content: String, position: (u16, u16)) -> Button {
+    pub fn new(name: &'static str, content: String, position: (u16, u16)) -> Button {
         Button {
             name,
             focused: false,

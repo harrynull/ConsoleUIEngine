@@ -3,13 +3,11 @@ use std::any::Any;
 use crossterm::input::KeyEvent;
 use crossterm::style;
 use crossterm::style::ContentStyle;
-
-use crate::console_ui::ConsoleUpdateInfo;
-use crate::console_ui::ui_components::Content;
-
-use super::Label;
-use super::super::SizedBuffer;
-use super::super::UiElement;
+use crate::ui_components::Content;
+use crate::console::ConsoleUpdateInfo;
+use crate::ui_element::UiElement;
+use crate::buffer::SizedBuffer;
+use crate::ui_components::Label;
 
 ui_component_struct!(
 pub struct Typer {
@@ -20,7 +18,7 @@ pub struct Typer {
 });
 
 impl Typer {
-    pub(crate) fn new(name: &'static str, content: Content, position: (u16, u16), speed: usize) -> Typer {
+    pub fn new(name: &'static str, content: Content, position: (u16, u16), speed: usize) -> Typer {
         Typer {
             name,
             focused: false,

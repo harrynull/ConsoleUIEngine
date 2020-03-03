@@ -6,10 +6,17 @@ edition = "2018"
 repository = "https://github.com/harrynull/ConsoleUIEngine"
 exclude = [
     "docs/*",
-    "src/main.rs",
-    "src/example_text.txt",
+    "examples/",
 	".github/"
 ]
+
+[lib]
+name = "console_ui_engine_null"
+path = "src/lib.rs"
+
+[[bin]]
+name = "example"
+path = "examples/main.rs"
 
 [dependencies]
 crossterm = "0.13.2"

@@ -2,9 +2,9 @@ use std::thread::current;
 
 use crossterm::style::{Attribute, Color, ContentStyle};
 
-use crate::console_ui::StyledChar;
 use std::str::FromStr;
 use std::ops::Index;
+use crate::buffer::StyledChar;
 
 enum StyleType {
     ForegroundColor(Color),

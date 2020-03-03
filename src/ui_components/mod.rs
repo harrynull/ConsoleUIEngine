@@ -1,8 +1,8 @@
 pub use self::button::*;
 pub use self::checkbox::*;
 pub use self::content::*;
-pub use self::input::*;
 pub use self::label::*;
+pub use self::input::*;
 pub use self::rectangle::*;
 pub use self::text::*;
 pub use self::typer::*;
